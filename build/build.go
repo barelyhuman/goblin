@@ -2,6 +2,7 @@ package build
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -12,13 +13,15 @@ import (
 )
 
 type Binary struct {
-	Source  string
-	Dest    string
-	OS      string
-	Arch    string
-	Version string
-	Path    string
-	Module  string
+	Container string
+	Name      string
+	Source    string
+	Dest      string
+	OS        string
+	Arch      string
+	Version   string
+	Path      string
+	Module    string
 }
 
 var environWhitelist = []string{
@@ -50,12 +53,13 @@ func environ() (env []string) {
 	return
 }
 
-func (bin *Binary) WriteBuild() error {
-
-	dir, err := os.UserHomeDir()
+func (bin *Binary) WriteBuild(writer io.Writer) error {
+	dir, err := tempDirectory()
 	if err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("retrieving user home: %w", err)
+		return fmt.Errorf("creating temporary directory: %w", err)
 	}
+
+	bin.Container = dir
 
 	err = os.Remove(filepath.Join(dir, "go.mod"))
 	if err != nil && !os.IsNotExist(err) {
@@ -87,6 +91,17 @@ func (bin *Binary) WriteBuild() error {
 		return err
 	}
 
+	f, err := os.Open(bin.Dest)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(writer, f)
+	if err != nil {
+		return err
+	}
+
+	os.RemoveAll(dir)
 	return nil
 }
 
@@ -165,6 +180,15 @@ func (bin *Binary) buildBinary(dir string) error {
 	return command(cmd)
 }
 
+func (bin *Binary) Cleanup() error {
+	err := os.RemoveAll(bin.Container)
+	if err != nil {
+		return err
+	}
+	err = os.RemoveAll(bin.Dest)
+	return err
+}
+
 // tempFilename returns a new temporary file name.
 func tempFilename() (string, error) {
 	f, err := ioutil.TempFile(os.TempDir(), "goblin")
@@ -174,4 +198,12 @@ func tempFilename() (string, error) {
 	defer f.Close()
 	defer os.Remove(f.Name())
 	return f.Name(), nil
+}
+
+func tempDirectory() (string, error) {
+	dir, err := ioutil.TempDir(os.TempDir(), "goblin")
+	if err != nil {
+		return "", err
+	}
+	return dir, nil
 }

@@ -1,0 +1,336 @@
+/* Resets */
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Lora:ital@1&display=swap");
+
+:root {
+  --color-black-0: #18181b;
+  --color-black-1: #27272a;
+  --color-black-2: #3f3f46;
+  --color-black-3: #52525b;
+  --color-black-4: #e4e4e7;
+  --color-black-5: #f4f4f5;
+  --color-black-6: #fafafa;
+
+  --success: #6db95a;
+  --error: #dd5e5e;
+  --white: var(--color-black-6);
+  --accent: var(--success);
+  --logo-accent: var(--white);
+  --bg: var(--color-black-0);
+  --bg-light: var(--color-black-1);
+  --bg-lighter: var(--color-black-2);
+  --fg: var(--color-black-6);
+  --fg-light: var(--color-black-5);
+  --fg-lighter: var(--color-black-4);
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  line-height: calc(1rem * 1.8);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 250ms ease;
+}
+
+a:hover {
+  background: var(--bg-light);
+}
+
+p,
+li {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+footer {
+  min-height: 32px;
+  padding: 16px;
+}
+
+/* Classes */
+input.large {
+  font-size: 18px;
+  line-height: 30px;
+  padding: 16px;
+}
+
+.container-boundaries {
+  padding: 0 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.container {
+  min-height: 95vh;
+}
+
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.h-50 {
+  height: 50%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.flex-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.align-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.justify-end {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+.justify-between {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.flex-col {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.m-0 {
+  margin: 0px;
+}
+
+.m-1 {
+  margin: 8px;
+}
+
+.m-2 {
+  margin: 16px;
+}
+
+.mt-1 {
+  margin-top: 8px;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mr-1 {
+  margin-right: 8px;
+}
+
+.mr-2 {
+  margin-right: 16px;
+}
+
+.ml-1 {
+  margin-left: 8px;
+}
+
+.ml-2 {
+  margin-left: 16px;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.p-0 {
+  padding: 0px;
+}
+
+.p-1 {
+  padding: 8px;
+}
+
+.p-2 {
+  padding: 16px;
+}
+
+.pb-1 {
+  padding-bottom: 8px;
+}
+
+.pb-2 {
+  padding-bottom: 16px;
+}
+
+.f-xs {
+  font-size: 0.8rem;
+}
+
+.f-small {
+  font-size: 14px;
+}
+
+.f-normal {
+  font-size: 16px;
+}
+
+.f-large {
+  font-size: 36px;
+}
+
+.fw-normal {
+  font-weight: 400;
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.bg-default {
+  background-color: var(--bg);
+}
+
+.bg-secondary {
+  background-color: var(--bg-light);
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.f-right {
+  float: right;
+}
+
+.f-left {
+  float: left;
+}
+
+.rounded-sm {
+  border-radius: 4px;
+}
+
+.rounded-md {
+  border-radius: 8px;
+}
+
+.rounded-circle {
+  border-radius: 50%;
+}
+
+.icon svg {
+  height: 16px;
+  width: 16px;
+  -webkit-transition: 230ms color ease;
+  -o-transition: 230ms color ease;
+  transition: 230ms color ease;
+}
+
+.icon:hover svg {
+  color: var(--bg-lighter);
+}
+
+.divider {
+  width: 85%;
+  height: 1px;
+  margin: 8px;
+  background: var(--bg-lighter);
+}
+
+.color-high-contrast {
+  color: #000;
+}
+
+.no-decoration {
+  text-decoration: none;
+}
+
+.border-b {
+  border-bottom-color: var(--bg-light);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+li {
+  padding: 4px 0 4px 8px;
+  list-style-image: url("/assets/arrow-right-list-size.svg");
+}
+
+.serif {
+  font-family: "Lora", serif;
+  font-style: italic;
+}
+
+.min-height-screen {
+  min-height: 100vh;
+}

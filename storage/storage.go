@@ -51,9 +51,9 @@ func (s *Storage) Upload(objectName string, filePath string) error {
 	return nil
 }
 
-func (s *Storage) GetSignedURL(objectName string) (string, error) {
+func (s *Storage) GetSignedURL(objectName string, alias string) (string, error) {
 	reqParams := make(url.Values)
-	reqParams.Set("response-content-disposition", "attachment; filename=\""+objectName+"\"")
+	reqParams.Set("response-content-disposition", "attachment; filename=\""+alias+"\"")
 	presignedURL, err := s.Client.PresignedGetObject(context.Background(), s.BucketName, objectName, time.Minute*5, reqParams)
 	if err != nil {
 		return "", err
