@@ -8,7 +8,7 @@ and the majority of the reason is that most of the research for the work has bee
 The reason for another repo is that the development on gobinaries has been slow for the past few months / years at this point
 and go has moved up 2 version and people are still waiting for gobinaries to update itself.
 
-** All credits to [tj](github.com/tj) for the idea and the initial implementation.**
+**All credits to [tj](github.com/tj) for the idea and the initial implementation.**
 
 ## Why not fork?
 
