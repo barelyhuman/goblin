@@ -12,7 +12,11 @@ and go has moved up 2 version and people are still waiting for gobinaries to upd
 
 ## Why not fork?
 
-Cause it's not the same as gobinaries, I have picked up code from the original repo as reference for the builds but it was all written again. Also the original is tied to GCP, Apex Logs and other services thus making it hard for anyone to spin up their own version of the binary service
+While the utils and build use the same concept, it's not gobinaries.
+
+Also the original is tied to GCP, Apex Logs and other services thus making it hard for anyone to spin up their own version of the binary service. Which isn't what I wish, aka the direction of the project is different in this case
+
+That and it's fun to build the arch from scratch, helps you learn.
 
 # Note
 
