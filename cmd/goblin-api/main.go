@@ -77,7 +77,7 @@ func envDefault(key string, def string) string {
 // TODO: move everything into their own interface/structs
 func main() {
 	shTemplates = template.Must(template.ParseGlob("templates/*"))
-	serverURL = envDefault("ORIGIN_URL", "localhost:"+envDefault("PORT", "3000"))
+	serverURL = envDefault("ORIGIN_URL", "http://localhost:3000")
 
 	// FIXME: Disabled storage and caching for initial version
 	// storageClient = &storage.Storage{}
