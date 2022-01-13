@@ -1,19 +1,533 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Goblin</title>
-    <link rel="stylesheet" href="/static/styles.css" />
-  </head>
-  <body>
-    <header class="container-boundaries">
-      <h1 class="m-0 p-0">Goblin</h1>
-      <p class="m-0 p-0">go binaries on a curl</p>
-    </header>
-    <main class="container container-boundaries">
-      <p></p>
-    </main>
-  </body>
-</html>
+<head>
+  <meta
+    name="viewport"
+    content="width=device-width,minimum-scale=1,initial-scale=1"
+  />
+  <meta charset="utf-8" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto+Mono:700&amp;display=swap"
+    rel="stylesheet"
+  />
+  <title>Goblin</title>
+  <meta name="description" content="go binaries in a curl" />
+  <meta name="url" content="https://goblin.reaper.im" />
+  <meta name="image" content="https://goblin.reaper.im/images/card.png" />
+  <meta property="og:title" content="Goblin" />
+  <meta property="og:description" content="go binaries in a curl" />
+  <meta property="og:url" content="https://goblin.reaper.im" />
+  <meta
+    property="og:image"
+    content="https://goblin.reaper.im/images/card.png"
+  />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="manifest" href="#" />
+  <link rel="mask-icon" href="#" color="#5bbad5" />
+  <link rel="shortcut icon" href="#" />
+  <link rel="stylesheet" href="static/styles.css" />
+
+  <style data-emotion-css="1mikozy">
+    .css-1mikozy {
+      padding-left: 32px;
+      padding-right: 32px;
+      padding-top: 48px;
+      padding-bottom: 48px;
+      width: 100%;
+      font-family: system-ui, sans-serif;
+      max-width: 1100px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-1mikozy {
+        padding-left: 48px;
+        padding-right: 48px;
+        padding-top: 160px;
+        padding-bottom: 160px;
+      }
+    }
+  </style>
+  <style data-emotion-css="gg4vpm">
+    .css-gg4vpm {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+    }
+  </style>
+  <style data-emotion-css="5iz0nw">
+    .css-5iz0nw {
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 24px;
+    }
+  </style>
+  <style data-emotion-css="donw8v">
+    .css-donw8v {
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  </style>
+  <style data-emotion-css="6t8m8f">
+    .css-6t8m8f {
+      -webkit-text-decoration: none;
+      text-decoration: none;
+      color: inherit;
+    }
+    .css-6t8m8f:hover {
+      color: var(--theme-ui-colors-primary, #4ad0fb);
+    }
+  </style>
+  <style data-emotion-css="16hcizi">
+    .css-16hcizi {
+      margin-top: 104px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-16hcizi {
+        margin-top: 168px;
+      }
+    }
+  </style>
+  <style data-emotion-css="1nh734i">
+    .css-1nh734i {
+      font-weight: bold;
+      font-size: 56px;
+      line-height: 56px;
+      -webkit-letter-spacing: -3px;
+      -moz-letter-spacing: -3px;
+      -ms-letter-spacing: -3px;
+      letter-spacing: -3px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-1nh734i {
+        font-size: 80px;
+        line-height: 88px;
+      }
+    }
+  </style>
+  <style data-emotion-css="1sqyapp">
+    .css-1sqyapp {
+      color: var(--theme-ui-colors-primary, #4ad0fb);
+    }
+  </style>
+  <style data-emotion-css="isfsa2">
+    .css-isfsa2 {
+      margin-top: 96px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+    }
+    @media screen and (min-width: 40em) {
+      .css-isfsa2 {
+        margin-top: 192px;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+      }
+    }
+  </style>
+  <style data-emotion-css="1c4hg7f">
+    .css-1c4hg7f {
+      max-width: 120px;
+    }
+  </style>
+  <style data-emotion-css="6hgt9x">
+    .css-6hgt9x {
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 24px;
+      max-width: 120px;
+    }
+  </style>
+  <style data-emotion-css="sir8vz">
+    .css-sir8vz {
+      margin-top: 24px;
+      width: auto;
+    }
+    @media screen and (min-width: 40em) {
+      .css-sir8vz {
+        margin-top: 0;
+        width: 70%;
+      }
+    }
+  </style>
+  <style data-emotion-css="1n4tby0">
+    .css-1n4tby0 {
+      box-shadow: 16px 48px 64px rgba(0, 0, 0, 0.32);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  </style>
+  <style data-emotion-css="98otve">
+    .css-98otve {
+      height: 32px;
+      background-color: #1d1d20;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: 8px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-98otve {
+        height: 40px;
+      }
+    }
+  </style>
+  <style data-emotion-css="151q3sz">
+    .css-151q3sz {
+      width: 8px;
+      height: 8px;
+      background-color: #fffefb;
+      margin-left: 8px;
+      opacity: 0.1;
+      border-radius: 50%;
+    }
+  </style>
+  <style data-emotion-css="17cy28i">
+    .css-17cy28i {
+      height: 260px;
+      overflow-y: auto;
+      -webkit-scroll-behavior: smooth;
+      -moz-scroll-behavior: smooth;
+      -ms-scroll-behavior: smooth;
+      scroll-behavior: smooth;
+      background-color: rgba(39, 39, 44, 0.9);
+      padding: 16px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-17cy28i {
+        height: 330px;
+      }
+    }
+  </style>
+  <style data-emotion-css="jgsey8">
+    .css-jgsey8 {
+      font-family: "Roboto Mono", monospace;
+      font-size: 11px;
+      line-height: 16px;
+      display: inline-block;
+      background-color: var(--theme-ui-colors-primary, #4ad0fb);
+      color: var(--theme-ui-colors-textContrast, #252529);
+      margin-bottom: 24px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 2px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-jgsey8 {
+        font-size: 14px;
+        line-height: 24px;
+      }
+    }
+    pre + .css-jgsey8 {
+      margin-top: 24px;
+    }
+  </style>
+  <style data-emotion-css="1st0s8t">
+    .css-1st0s8t {
+      margin-top: 128px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-1st0s8t {
+        margin-top: 240px;
+      }
+    }
+  </style>
+  <style data-emotion-css="12hzocv">
+    .css-12hzocv {
+      font-size: 16px;
+      line-height: 16px;
+    }
+    .css-12hzocv:not(:first-child) {
+      margin-top: 80px;
+    }
+    @media screen and (min-width: 40em) {
+      .css-12hzocv:not(:first-child) {
+        margin-top: 160px;
+      }
+    }
+    .css-12hzocv > * + * {
+      margin-top: 16px;
+    }
+  </style>
+  <style data-emotion-css="hdr61c">
+    .css-hdr61c {
+      color: var(--theme-ui-colors-primary, #4ad0fb);
+      margin-bottom: 32px;
+    }
+  </style>
+  <style data-emotion-css="8twubz">
+    .css-8twubz {
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 24px;
+      color: var(--theme-ui-colors-primary, #4ad0fb);
+      margin-bottom: 32px;
+    }
+  </style>
+  <style data-emotion-css="hqrh25">
+    .css-hqrh25 {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 27px;
+    }
+    .css-hqrh25 code {
+      font-weight: 600;
+      font-size: 12px;
+      display: inline-block;
+      background-color: var(--theme-ui-colors-textContrast, #252529);
+      padding-left: 8px;
+      padding-right: 8px;
+      border-radius: 2px;
+    }
+    .css-hqrh25 + h3 {
+      margin-top: 48px;
+    }
+  </style>
+  <style data-emotion-css="1svm1xq">
+    .css-1svm1xq {
+      background-color: #252529;
+      opacity: 0.6;
+      padding: 16px;
+      font-size: 16px;
+      line-height: 24px;
+      overflow: auto;
+      -webkit-user-select: all;
+      -moz-user-select: all;
+      -ms-user-select: all;
+      user-select: all;
+    }
+  </style>
+  <style data-emotion-css="1fqm1o7">
+    .css-1fqm1o7 {
+      list-style: initial;
+      list-style-position: outside;
+      padding-left: 20px;
+    }
+  </style>
+  <style data-emotion-css="164r41r">
+    .css-164r41r {
+      margin-top: 8px;
+    }
+  </style>
+  <style data-emotion="css"></style>
+</head>
+<body>
+  <div id="__next">
+    <div class="css-1mikozy">
+      <nav class="css-gg4vpm">
+        <h2 class="css-5iz0nw">Goblin</h2>
+        <h3 class="css-donw8v">
+          <a href="https://github.com/barleyhuman/goblin" class="css-6t8m8f"
+            >GitHub</a
+          >
+        </h3>
+      </nav>
+      <header class="css-16hcizi">
+        <h1 class="css-1nh734i">
+          Goblin
+          <strong class="css-1sqyapp">go binaries in a curl</strong>
+        </h1>
+        <h2>
+          basically... goblin builds the binaries (on-demand) for
+          <span class="css-1sqyapp">Go projects</span>
+        </h2>
+        <h3>
+          Think
+          <a class="css-6t8m8f" href="gobinaries.com">gobinaries.com</a> (if the
+          website didn't give it away already)
+        </h3>
+      </header>
+      <section class="css-isfsa2">
+        <h3 class="css-6hgt9x">Binaries built on-demand</h3>
+        <div class="css-sir8vz">
+          <div class="css-1n4tby0">
+            <div class="css-98otve">
+              <div class="css-151q3sz"></div>
+              <div class="css-151q3sz"></div>
+              <div class="css-151q3sz"></div>
+            </div>
+            <div class="css-17cy28i">
+              <pre class="css-jgsey8">
+$ curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh</pre
+              >
+              <pre class="css-h8w12j">
+&gt;&gt; Downloading github.com/rakyll/hey@v0.1.3
+&gt;&gt; Building binary for darwin amd64
+</pre
+              >
+              <pre class="css-h8w12j">
+&gt;&gt; Installing hey to /usr/local/bin</pre
+              >
+              <pre class="css-h8w12j">&gt;&gt; Installation complete</pre>
+              <pre class="css-jgsey8">$ hey https://apex.sh</pre>
+              <pre class="css-h8w12j">
+Summary:
+  Requests/sec: 382</pre
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="css-1st0s8t">
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">Introduction</h2>
+          <p class="css-hqrh25">
+            Go Binaries allows developers to install Go programs from the
+            command-line, without requiring Go to be installed on your machine,
+            allowing users outside of the Go community to easily install your
+            tools. The binaries are cross-compiled upon request and cached for
+            future installations.
+          </p>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">Usage</h2>
+          <p class="css-hqrh25">
+            Install <code class="css-0">PKG</code> with semver
+            <code class="css-0">VERSION</code>.
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="css-0">curl -sf https://goblin.reaper.im/&lt;PKG&gt;&lt;@VERSION&gt; | sh
+</code></pre>
+          <p class="css-hqrh25">
+            Install <code class="css-0">PKG</code> to the given directory
+            <code class="css-0">PREFIX</code>. The directory will be created if
+            it does not exist.
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="css-0">curl -sf https://goblin.reaper.im/&lt;PKG&gt;&lt;@VERSION&gt; | PREFIX=/tmp sh
+</code></pre>
+          <p class="css-hqrh25">
+            The <code class="css-0">github.com</code> path prefix is optional.
+          </p>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">Examples</h2>
+          <p class="css-hqrh25">
+            Install the <code class="css-0">hey</code> HTTP benchmarking tool:
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh
+</code></pre>
+          <p class="css-hqrh25">
+            Install the <code class="css-0">v0.0.7</code> version of
+            <code class="css-0">statico</code>:
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="css-0">curl -sf https://goblin.reaper.im/barelyhuman/statico@v0.0.7 | sh
+</code></pre>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">Semver support</h2>
+          <p class="css-hqrh25">The following semver patterns are supported:</p>
+          <ul class="css-1fqm1o7">
+            <li class="css-164r41r">
+              Exact version: <code class="css-0">v1.2.3</code>
+              <!-- ,<code class="css-0">1.2.3</code> -->
+            </li>
+            <!-- <li class="css-164r41r">
+              Wildcards: <code class="css-0">v1.x</code>,
+              <code class="css-0">v1.2.x</code>, <code class="css-0">1.x</code>,
+              <code class="css-0">1.2.x</code>
+            </li>
+            <li class="css-164r41r">
+              Wildcards (implicit): <code class="css-0">v1</code>,
+              <code class="css-0">v1.2</code>, <code class="css-0">1.2</code>
+            </li>
+            <li class="css-164r41r">
+              Leading <code class="css-0">v</code> is optional, regardless of
+              the Git tag
+            </li> -->
+          </ul>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">How does it work?</h2>
+          <p class="css-hqrh25">
+            Take for example you want to install @rakyll's fantastic HTTP
+            benchmarking tool
+            <a href="https://goblin.reaper.im/rakyll/hey" class="css-6t8m8f"
+              >hey</a
+            >, to install the latest release you would run:
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh
+</code></pre>
+          <p class="css-hqrh25">
+            This request responds with a shell script which performs a second
+            request, populated with the resolved version and architecture as
+            shown here:
+          </p>
+          <pre
+            class="css-1svm1xq"
+          ><code class="css-0">https://goblin.reaper.im/binary/github.com/rakyll/hey?os=darwin&amp;arch=amd64&amp;version=v0.1.3
+</code></pre>
+          <p class="css-hqrh25">
+            The response of this request is a Golang binary compiled for the
+            requested os, architecture, and package version.
+          </p>
+          <p>
+            <strong class="red">
+              The result will be cached in a CDN for subsequent requests in one
+              of the future versions of this service, I'm shorthanded right now
+            </strong>
+          </p>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">Limitations</h2>
+          <ul class="css-1fqm1o7">
+            <li class="css-164r41r">
+              The Go package must compile in under 100 seconds (CDN limitation)
+            </li>
+            <li class="css-164r41r">
+              The Go package must have at least one Git tag
+            </li>
+          </ul>
+        </article>
+        <article class="css-12hzocv">
+          <h2 class="css-8twubz">FAQ</h2>
+          <h3 class="css-donw8v">What's wrong with go-get?</h3>
+          <p class="css-hqrh25">
+            Using go-get for installation is fine if you're a Go user, however,
+            if you're creating programs which are designed to be used by a wider
+            audience it's unlikely they will have Go installed.
+          </p>
+          <p class="css-hqrh25">
+            Go Binaries is also useful when provisioning servers or continuous
+            integration, where the Go toolchain may not be available.
+          </p>
+          <h3 class="css-donw8v">Which version of Go is used?</h3>
+          <p class="css-hqrh25">
+            Currently Go 1.16.x via the official golang:1.16 Docker image.
+          </p>
+        </article>
+      </section>
+    </div>
+  </div>
+</body>
