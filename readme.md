@@ -12,24 +12,16 @@ and go has moved up 2 version and people are still waiting for gobinaries to upd
 
 ## Why not fork?
 
-While the utils and build use the same concept, it's not gobinaries.
+To keep it short, it's fun to build the arch from scratch, helps you learn.
+Also the mentality of both the authors differ.
 
-Also the original is tied to GCP, Apex Logs and other services thus making it hard for anyone to spin up their own version of the binary service. Which isn't what I wish, aka the direction of the project is different in this case
+(was easier to start from scratch then remove each blocking thing from the original one)
 
-That and it's fun to build the arch from scratch, helps you learn.
+## Features
 
-# Note
-
-WIP! HACKY TO THE CORE.
-The current repo isn't even usable, you can join in and help speed up the process but right now the below is what it can do
-
-## Working Features
-
-- [x] Curl Request scripts and Renders
-- [x] Create a local build of the hardcoded package
-- [x] Upload it to a storage service (commented out in initial versions)
-- [ ] Fetch from the storage service (part of the request scripts)
-- [ ] Finally host this thing
+- [x] Easy install Script
+- [x] Go Lang 1.16 (1.17 - Coming soon)
+- [ ] Binary Build Caching
 
 ## Authors
 
@@ -37,7 +29,7 @@ Right now, just [Reaper](https://github.com/barelyhuman)
 
 ## Usage
 
-Coming soon
+You can read about it on https://goblin.reaper.im
 
 ## License
 
