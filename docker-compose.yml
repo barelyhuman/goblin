@@ -7,9 +7,7 @@ services:
     container_name: goblin_api
     env_file: .env
     expose:
-      - "3000:3000"
-    environment:
-      MINIO_URL: goblin_minio:9000
+      - 3000
     restart: always
     ports:
       - "3000:3000"
