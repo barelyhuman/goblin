@@ -95,28 +95,38 @@ func (v *Resolver) ParseVersion(version string) error {
 
 // Resolve the closes version to the given semver from the proxy
 func (v *Resolver) ResolveClosestVersion() (string, error) {
+	var versionTags []string
+
 	resp, err := http.Get(getVersionListProxyURL(v.Pkg))
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
 
-	var versionTags []string
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
 
 	versionTags = strings.Split(string(data), "\n")
-
 	matchedVersion := ""
 
 	for _, versionTag := range versionTags {
-		if len(versionTag) < 1 || !v.ConstraintCheck.Check(
-			semver.MustParse(versionTag),
+		if len(versionTag) == 0 {
+			continue
+		}
+
+		ver, err := semver.NewVersion(versionTag)
+		if err != nil {
+			return "", err
+		}
+
+		if !v.ConstraintCheck.Check(
+			ver,
 		) {
 			continue
 		}
+
 		matchedVersion = versionTag
 	}
 
@@ -138,10 +148,15 @@ func isSemver(version string) (*semver.Constraints, error) {
 	return semver.NewConstraint("= " + version)
 }
 
-// normalize the proxy url to not have traling slashes
+// normalize the proxy url to
+// - not have traling slashes
 func normalizeUrl(url string) string {
 	if strings.HasSuffix(url, "/") {
-		return strings.Replace(url, "/$", "", 1)
+		ind := strings.LastIndex(url, "/")
+		if ind == -1 {
+			return url
+		}
+		return strings.Join([]string{url[:ind], "", url[ind+1:]}, "")
 	}
 	return url
 }
