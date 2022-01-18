@@ -170,8 +170,8 @@
 				</p>
 
 				<p class="text-muted text-xs">
-					The result will be cached in a CDN for subsequent requests in one of a
-					future version
+					The result will be cached in a CDN for subsequent requests in a future
+					version
 				</p>
 			</div>
 		</div>
