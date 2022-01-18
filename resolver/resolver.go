@@ -2,9 +2,11 @@ package resolver
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -75,10 +77,8 @@ func (v *Resolver) ParseVersion(version string) error {
 		return nil
 	}
 
-	versionConstraint, err := isSemver(version)
-
 	// return the string back if it's a valid hash string
-	if err != nil {
+	if !isSemver(version) && !isValidSemverConstraint(version) {
 		matched, err := regexp.MatchString(hashRegex, version)
 		if matched {
 			v.Hash = true
@@ -89,7 +89,25 @@ func (v *Resolver) ParseVersion(version string) error {
 			return err
 		}
 	}
-	v.ConstraintCheck = versionConstraint
+
+	if isSemver(version) {
+		check, err := semver.NewConstraint("= " + version)
+		if err != nil {
+			return err
+		}
+
+		v.ConstraintCheck = check
+	}
+
+	if isValidSemverConstraint(version) {
+		check, err := semver.NewConstraint(version)
+		if err != nil {
+			return err
+		}
+
+		v.ConstraintCheck = check
+	}
+
 	return nil
 }
 
@@ -111,6 +129,8 @@ func (v *Resolver) ResolveClosestVersion() (string, error) {
 	versionTags = strings.Split(string(data), "\n")
 	matchedVersion := ""
 
+	var sortedVersionTags []*semver.Version
+
 	for _, versionTag := range versionTags {
 		if len(versionTag) == 0 {
 			continue
@@ -120,14 +140,18 @@ func (v *Resolver) ResolveClosestVersion() (string, error) {
 		if err != nil {
 			return "", err
 		}
+		sortedVersionTags = append(sortedVersionTags, ver)
+	}
+	sort.Sort(semver.Collection(sortedVersionTags))
 
+	for _, versionTag := range sortedVersionTags {
 		if !v.ConstraintCheck.Check(
-			ver,
+			versionTag,
 		) {
 			continue
 		}
-
-		matchedVersion = versionTag
+		matchedVersion = versionTag.String()
+		break
 	}
 
 	if len(matchedVersion) == 0 {
@@ -139,13 +163,22 @@ func (v *Resolver) ResolveClosestVersion() (string, error) {
 
 // check if the given string is valid semver string and if yest
 // create a constraint checker out of it
-func isSemver(version string) (*semver.Constraints, error) {
+func isSemver(version string) bool {
 	_, err := semver.NewVersion(version)
-	if err != nil {
-		return nil, err
-	}
+	return err == nil
+}
 
-	return semver.NewConstraint("= " + version)
+func isValidSemverConstraint(version string) bool {
+	versionRegex := `v?([0-9|x|X|\*]+)(\.[0-9|x|X|\*]+)?(\.[0-9|x|X|\*]+)?` +
+		`(-([0-9A-Za-z\-]+(\.[0-9A-Za-z\-]+)*))?` +
+		`(\+([0-9A-Za-z\-]+(\.[0-9A-Za-z\-]+)*))?`
+	constraintOperations := `=||!=|>|<|>=|=>|<=|=<|~|~>|\^`
+	validConstraintRegex := regexp.MustCompile(fmt.Sprintf(
+		`^(\s*(%s)\s*(%s)\s*\,?)+$`,
+		constraintOperations,
+		versionRegex))
+
+	return validConstraintRegex.MatchString(version)
 }
 
 // normalize the proxy url to

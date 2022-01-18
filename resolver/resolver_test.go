@@ -124,7 +124,6 @@ func TestResolveVersionWithVersion(t *testing.T) {
 	if version != versionToResolve {
 		t.Fatalf("Failed to resolve, resolved:%v,expected resolve:%v", version, versionToResolve)
 	}
-
 }
 
 func TestResolveVersionWithoutVersion(t *testing.T) {
