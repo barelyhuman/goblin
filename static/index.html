@@ -370,7 +370,7 @@
             </div>
             <div class="css-17cy28i">
               <pre class="css-jgsey8">
-$ curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh</pre
+$ curl -sf https://goblin.reaper.im/github.com/rakyll/hey@v0.1.3 | sh</pre
               >
               <pre class="css-h8w12j">
 &gt;&gt; Downloading github.com/rakyll/hey@v0.1.3
@@ -426,7 +426,8 @@ Summary:
           ><code class="css-0">curl -sf https://goblin.reaper.im/&lt;PKG&gt;&lt;@VERSION&gt; | PREFIX=/tmp sh
 </code></pre>
           <p class="css-hqrh25">
-            The <code class="css-0">github.com</code> path prefix is optional.
+            The <code class="css-0">github.com</code> path prefix is
+            <strong>not</strong> optional.
           </p>
         </article>
         <article class="css-12hzocv">
@@ -436,7 +437,7 @@ Summary:
           </p>
           <pre
             class="css-1svm1xq"
-          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh
+          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/github.com/rakyll/hey@v0.1.3 | sh
 </code></pre>
           <p class="css-hqrh25">
             Install the <code class="css-0">v0.0.7</code> version of
@@ -444,7 +445,7 @@ Summary:
           </p>
           <pre
             class="css-1svm1xq"
-          ><code class="css-0">curl -sf https://goblin.reaper.im/barelyhuman/statico@v0.0.7 | sh
+          ><code class="css-0">curl -sf https://goblin.reaper.im/github.com/barelyhuman/statico@v0.0.7 | sh
 </code></pre>
         </article>
         <article class="css-12hzocv">
@@ -452,14 +453,16 @@ Summary:
           <p class="css-hqrh25">The following semver patterns are supported:</p>
           <ul class="css-1fqm1o7">
             <li class="css-164r41r">
-              Exact version: <code class="css-0">v1.2.3</code>
-              <!-- ,<code class="css-0">1.2.3</code> -->
+              Exact version: <code class="css-0">v1.2.3</code> ,<code
+                class="css-0"
+                >1.2.3</code
+              >
             </li>
             <!-- <li class="css-164r41r">
               Wildcards: <code class="css-0">v1.x</code>,
               <code class="css-0">v1.2.x</code>, <code class="css-0">1.x</code>,
               <code class="css-0">1.2.x</code>
-            </li>
+            </li>-->
             <li class="css-164r41r">
               Wildcards (implicit): <code class="css-0">v1</code>,
               <code class="css-0">v1.2</code>, <code class="css-0">1.2</code>
@@ -467,7 +470,7 @@ Summary:
             <li class="css-164r41r">
               Leading <code class="css-0">v</code> is optional, regardless of
               the Git tag
-            </li> -->
+            </li>
           </ul>
         </article>
         <article class="css-12hzocv">
@@ -475,13 +478,15 @@ Summary:
           <p class="css-hqrh25">
             Take for example you want to install @rakyll's fantastic HTTP
             benchmarking tool
-            <a href="https://goblin.reaper.im/rakyll/hey" class="css-6t8m8f"
+            <a
+              href="https://goblin.reaper.im/github.com/rakyll/hey"
+              class="css-6t8m8f"
               >hey</a
             >, to install the latest release you would run:
           </p>
           <pre
             class="css-1svm1xq"
-          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/rakyll/hey@v0.1.3 | sh
+          ><code class="language-sh css-0">curl -sf https://goblin.reaper.im/github.com/rakyll/hey | sh
 </code></pre>
           <p class="css-hqrh25">
             This request responds with a shell script which performs a second
