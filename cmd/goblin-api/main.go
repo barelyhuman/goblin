@@ -94,13 +94,6 @@ func main() {
 func normalizePackage(pkg string) string {
 	// strip leading protocol
 	pkg = strings.Replace(pkg, "https://", "", 1)
-
-	// cleanup existing github.com
-	pkg = strings.Replace(pkg, "github.com/", "", 1)
-
-	// implicit github.com
-	pkg = "github.com/" + pkg
-
 	return pkg
 }
 
