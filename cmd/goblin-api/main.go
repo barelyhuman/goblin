@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/barelyhuman/goblin/build"
+	"github.com/barelyhuman/goblin/resolver"
 )
 
 var shTemplates *template.Template
@@ -93,19 +94,12 @@ func main() {
 func normalizePackage(pkg string) string {
 	// strip leading protocol
 	pkg = strings.Replace(pkg, "https://", "", 1)
-
-	// cleanup existing github.com
-	pkg = strings.Replace(pkg, "github.com/", "", 1)
-
-	// implicit github.com
-	pkg = "github.com/" + pkg
-
 	return pkg
 }
 
 func parsePackage(path string) (pkg, mod, version, bin string) {
 	p := strings.Split(path, "@")
-	version = "master"
+	version = ""
 
 	// pkg
 	pkg = normalizePackage(p[0])
@@ -144,6 +138,17 @@ func fetchInstallScript(rw http.ResponseWriter, req *http.Request) {
 	pkg := strings.TrimPrefix(req.URL.Path, "/")
 	pkg, _, version, name := parsePackage(pkg)
 
+	v := &resolver.Resolver{
+		Pkg: pkg,
+	}
+
+	v.ParseVersion(version)
+	resolvedVersion, err := v.ResolveVersion()
+	if err != nil || len(resolvedVersion) == 0 {
+		render(rw, "error.sh", ("Failed to resolve version:" + version))
+		return
+	}
+
 	render(rw, "install.sh", struct {
 		URL             string
 		Package         string
@@ -155,7 +160,7 @@ func fetchInstallScript(rw http.ResponseWriter, req *http.Request) {
 		Package:         pkg,
 		Binary:          name,
 		OriginalVersion: version,
-		Version:         version,
+		Version:         resolvedVersion,
 	})
 }
 
