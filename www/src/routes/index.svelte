@@ -26,7 +26,7 @@
 			to="opacity-1 translate-y-0"
 		>
 			<Command
-				command="curl -sf https://goblin.reaper.im/github.com/rakyll/hey@v0.1.3 | sh"
+				command="curl -sf https://goblin.reaper.im/github.com/rakyll/hey | sh"
 			/>
 		</Transition>
 
@@ -68,8 +68,8 @@
 
 		<div>
 			<p>
-				Go binaries install from the command line without requiring Go to be
-				installed locally. Goblin streamlines this process by cross-compiling
+				Goblin allows you to install go binaries from the commandline without Go
+				to be installed locally. We streamline this process by cross-compiling
 				binaries on request and caching for subsequent installations.
 			</p>
 		</div>
@@ -87,11 +87,15 @@
 				</p>
 
 				<Command
-					command="curl -sf https://goblin.reaper.im/github.com/<PKG>[@VERSION] | sh"
+					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | sh"
 				/>
 
-				<p class="text-muted text-xs">
-					Note: <span class="font-medium text-subtle">github.com</span> is required
+				<p class="text-muted text-xs leading-6">
+					Note: the <InlineCode>PKG</InlineCode> part has to contain the entire package
+					path of the module, so <InlineCode>barelyhuman/commitlog</InlineCode> will
+					be <InlineCode>github.com/barelyhuman/commitlog</InlineCode> and <InlineCode
+						>yaml.v2</InlineCode
+					> will be <InlineCode>gopkg.in/yaml.v2</InlineCode>
 				</p>
 			</div>
 
@@ -154,9 +158,10 @@
 		<div class="space-y-6">
 			<div class="space-y-3">
 				<p>
-					Each request fetches the latest tag from GitHub and responds with a
-					shell script which performs a second request, populated with the
-					resolved version and architecture as shown here:
+					Each request resolves the needed tags and versions from
+					<a href="https://proxy.golang.org/">proxy.golang.org</a> and responds with
+					a shell script which performs a second request populated with the resolved
+					version and architecture as shown here:
 				</p>
 
 				<Command
@@ -181,10 +186,11 @@
 		<h3 id="caveats" class="font-semibold text-2xl">Caveats</h3>
 
 		<ul class="ml-[18px] list-disc">
-			<li>Go package must have at least one git tag</li>
 			<li>
-				Go package must compile in under 100 seconds due to CDN limitations
+				Must have atleast one version on proxy.golang.org or if using Github
+				packages, you can try with the commit hash
 			</li>
+			<li>Must compile in 200 seconds, due to timeout restrictions</li>
 		</ul>
 	</div>
 
@@ -204,6 +210,27 @@
 			<div class="space-y-3">
 				<h4 class="font-semibold">Which version of Go is used?</h4>
 				<p>Currently Go 1.16.x via the official golang:1.16 Docker image.</p>
+			</div>
+
+			<div class="space-y-3">
+				<h4 class="font-semibold">Does it support Caching?</h4>
+				<p>
+					Not yet, but future version of goblin will, watch us on github to
+					track the progress
+				</p>
+			</div>
+
+			<div class="space-y-3">
+				<h4 class="font-semibold">Can I use commit hashes?</h4>
+				<p class="mb-3">
+					Yes, you can send a commithash in place of <InlineCode
+						>@VERSION</InlineCode
+					> and it'll try to build it with the given hash.
+				</p>
+				<Command
+					hidePrefix
+					command="curl -sf https://goblin.reaper.im/github.com/barelyhuman/commitlog@bba8d7a63d622e4f12dbea9722b647cd985be8ad"
+				/>
 			</div>
 		</div>
 	</div>
