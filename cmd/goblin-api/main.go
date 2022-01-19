@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/barelyhuman/goblin/build"
@@ -28,15 +29,10 @@ func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if strings.HasPrefix(path, "/static") {
-		path = "./" + path
-		_, err := os.Stat(path)
-		if err != nil {
-			rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
-			rw.WriteHeader(http.StatusTeapot)
-			fmt.Fprintln(rw, "Failed getting static file")
-		}
-		http.ServeFile(rw, req, path)
+	file := filepath.Join("static", path)
+	info, err := os.Stat(file)
+	if err == nil && info.Mode().IsRegular() {
+		http.ServeFile(rw, req, file)
 		return
 	}
 
