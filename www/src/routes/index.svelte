@@ -180,7 +180,7 @@
 	<div class="space-y-6">
 		<h3 id="caveats" class="font-semibold text-2xl">Caveats</h3>
 
-		<ul class="list-disc list-inside">
+		<ul class="ml-[18px] list-disc">
 			<li>Go package must have at least one git tag</li>
 			<li>
 				Go package must compile in under 100 seconds due to CDN limitations
