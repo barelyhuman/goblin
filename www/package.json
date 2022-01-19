@@ -11,6 +11,7 @@
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
+		"@sveltejs/adapter-static": "^1.0.0-next.26",
 		"@sveltejs/kit": "next",
 		"autoprefixer": "^10.4.2",
 		"postcss": "^8.4.5",
@@ -30,8 +31,5 @@
 		"plugins": [
 			"prettier-plugin-svelte"
 		]
-	},
-	"dependencies": {
-		"@sveltejs/adapter-vercel": "^1.0.0-next.37"
 	}
 }
