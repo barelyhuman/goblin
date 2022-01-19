@@ -38,7 +38,7 @@
 			>
 				<a
 					href="#intro"
-					class="px-4 py-2 font-medium text-sm text-on-accent bg-accent border border-accent rounded-md flex items-center hover:opacity-90"
+					class="px-4 py-2 font-medium text-md text-on-accent bg-accent border border-accent rounded-md flex items-center hover:opacity-90"
 				>
 					Get Started
 				</a>
@@ -53,7 +53,7 @@
 					rel="external"
 					target="_blank"
 					href="https://github.com/barelyhuman/goblin"
-					class="px-4 py-2 font-medium text-sm text-subtle border rounded-md flex items-center hover:bg-surface"
+					class="px-4 py-2 font-medium text-md text-subtle border rounded-md flex items-center hover:bg-surface"
 				>
 					Source
 				</a>
