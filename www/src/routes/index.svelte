@@ -2,6 +2,7 @@
 	import Command from '$lib/command.svelte'
 	import InlineCode from '$lib/inline-code.svelte'
 	import Transition from '$lib/transition.svelte'
+	import HitsCounter from '$lib/hits-counter.svelte'
 </script>
 
 <section class="py-20 min-h-[calc(100vh-5rem)]">
@@ -233,5 +234,8 @@
 				/>
 			</div>
 		</div>
+	</div>
+	<div>
+		<HitsCounter />
 	</div>
 </section>
