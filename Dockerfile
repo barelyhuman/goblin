@@ -5,7 +5,6 @@ RUN npm i -g pnpm
 RUN pnpm install
 RUN pnpm build
 
-
 FROM golang:1.16
 WORKDIR /app
 COPY go.* ./
@@ -15,7 +14,6 @@ RUN mkdir -p ./static
 COPY --from="website-builder" /www/build ./static
 RUN go build -o /server cmd/goblin-api/main.go
 
-ENV PORT 3000
 EXPOSE 3000
 
 CMD [ "/server" ]
