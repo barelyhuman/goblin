@@ -176,6 +176,17 @@ start() {
   log_info "Building binary for $os $arch ... Please wait"
   http_download $tmp "$api/binary/$pkg?os=$os&arch=$arch&version=$version&out=$out"
 
+  # check if the directory exists and also check if it requires write permissions
+  if [ ! -d  "$prefix" ]; then 
+    log_info "$prefix doesn't exist, attempting to create it"
+    if [ -w "$prefix" ]; then
+      mkdir -p "$prefix"
+    else
+      log_info "Permissions required for creating $prefix"
+      sudo mkdir -p "$prefix"
+    fi
+  fi
+
   if [ -w "$prefix" ]; then
   log_info "Installing $out to $prefix"
     install "$tmp" "$prefix"
