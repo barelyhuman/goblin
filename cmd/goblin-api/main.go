@@ -144,6 +144,16 @@ func fetchInstallScript(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// == mark default to latest version when nothing is provided ==
+	// this has be separated and put here since `latest` might actually
+	// be a tag provided to the package
+	// and could be then used, so using the branch name
+	// makes no sense when working with go proxy instead of
+	// github for example
+	if len(version) == 0 {
+		version = "latest"
+	}
+
 	render(rw, "install.sh", struct {
 		URL             string
 		Package         string
