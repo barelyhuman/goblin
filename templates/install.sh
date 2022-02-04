@@ -165,7 +165,8 @@ start() {
   version="{{.Version}}"
   
   prefix=${PREFIX:-"/usr/local/bin"}
-  tmp="$(mktmpdir)/$bin"
+  out=${OUT:-"$bin"}
+  tmp="$(mktmpdir)/$out"
 
   echo
   log_info "Downloading $pkg@$original_version"
@@ -173,10 +174,10 @@ start() {
     log_info "Resolved version $original_version to $version"
   fi
   log_info "Building binary for $os $arch ... Please wait"
-  http_download $tmp "$api/binary/$pkg?os=$os&arch=$arch&version=$version"
+  http_download $tmp "$api/binary/$pkg?os=$os&arch=$arch&version=$version&out=$out"
 
   if [ -w "$prefix" ]; then
-  log_info "Installing $bin to $prefix"
+  log_info "Installing $out to $prefix"
     install "$tmp" "$prefix"
   else
     log_info "Permissions required for installation to $prefix — alternatively specify a new directory with:"
