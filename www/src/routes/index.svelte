@@ -108,11 +108,28 @@
 				</p>
 
 				<Command
-					command="curl -sf https://goblin.reaper.im/github.com/<PKG>[@VERSION] | PREFIX=/tmp sh"
+					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | PREFIX=/tmp sh"
 				/>
 
 				<p class="text-muted text-xs">
 					The directory will be created if it does not exist
+				</p>
+			</div>
+
+			<div class="space-y-3">
+				<p>
+					Install <InlineCode>PKG</InlineCode> to an custom named binary <InlineCode
+						>OUT</InlineCode
+					>
+				</p>
+
+				<Command
+					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | OUT=example.exe sh"
+				/>
+
+				<p class="text-muted text-xs">
+					Specifically necessary if you are working Windows and need the `exe`
+					executable, in someplace handy.
 				</p>
 			</div>
 		</div>
@@ -148,6 +165,17 @@
 					<span class="font-medium text-subtle">v</span> being optional
 				</p>
 			</div>
+			<div class="space-y-3">
+				<p>
+					Install latest version of <InlineCode>godoc</InlineCode> from <InlineCode
+						>golang.org/x/tools/godoc</InlineCode
+					>
+				</p>
+
+				<Command
+					command="curl -sf https://goblin.reaper.im/golang.org/x/tools/godoc | sh"
+				/>
+			</div>
 		</div>
 	</div>
 
@@ -167,12 +195,13 @@
 
 				<Command
 					hidePrefix
-					command="https://goblin.reaper.im/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3"
+					command="https://goblin.reaper.im/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3&out=hey"
 				/>
 
 				<p>
 					The response of this request is a Golang binary compiled for the
-					requested os, architecture, and package version.
+					requested os, architecture,package version, and the binary's name to
+					used
 				</p>
 
 				<p class="text-muted text-xs">
