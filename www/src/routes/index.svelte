@@ -112,7 +112,13 @@
 				/>
 
 				<p class="text-muted text-xs">
-					The directory will be created if it does not exist
+					The directory will be created if it does not exist.
+				</p>
+				<p class="text-muted text-xs">
+					This might create issues in certain cases so it's prefered that you
+					check if the directory exists on the system already. The default
+					directory is <InlineCode>/usr/local/bin</InlineCode> and is expected to
+					exist in most systems.
 				</p>
 			</div>
 
