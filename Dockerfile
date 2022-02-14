@@ -5,7 +5,7 @@ RUN npm i -g pnpm
 RUN pnpm install
 RUN pnpm build
 
-FROM golang:1.16
+FROM golang:1.17
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
