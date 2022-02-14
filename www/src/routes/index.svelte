@@ -3,6 +3,7 @@
 	import InlineCode from '$lib/inline-code.svelte'
 	import Transition from '$lib/transition.svelte'
 	import HitsCounter from '$lib/hits-counter.svelte'
+	import LinkButton from '$lib/link-button.svelte'
 </script>
 
 <section class="py-20 min-h-[calc(100vh-5rem)]">
@@ -73,6 +74,28 @@
 				to be installed locally. We streamline this process by cross-compiling
 				binaries on request and caching for subsequent installations.
 			</p>
+		</div>
+		<div>
+			<p class="mb-4">
+				While goblin is a free service and open source, server's aren't. It'd be
+				of great help if you'd <strong>support</strong> the project.
+			</p>
+			<div class="flex align-center">
+				<LinkButton
+					external
+					variant="secondary"
+					href="https://ko-fi.com/barelyreaper"
+				>
+					One time
+				</LinkButton>
+
+				<LinkButton
+					external
+					additionalClasses="ml-2"
+					variant="secondary"
+					href="https://liberapay.com/reaper">Recurring</LinkButton
+				>
+			</div>
 		</div>
 	</div>
 
