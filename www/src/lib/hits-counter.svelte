@@ -4,9 +4,17 @@
 	const url = 'https://goblin.reaper.im'
 	onMount(async () => {
 		fetch(
-			`https://hits.link/hits?bgLeft=27272a&border=square&json=true&bgRight=27272a&url=${url}`
+			`https://api.hits.link/v1/hits?border=square&json=true&bgRight=27272a&bgLeft=27272a&url=${url}`
 		)
-			.then((response) => response.json())
+			.then((response) => {
+				console.log({ response })
+
+				if (!response.ok) {
+					throw response
+				}
+
+				return response.json()
+			})
 			.then((data) => {
 				count = data.data.hits
 			})
