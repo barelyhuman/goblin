@@ -20,7 +20,7 @@ Also the mentality of both the authors differ.
 ## Features
 
 - [x] Easy install Script
-- [x] Go Lang 1.16 (1.17 - Coming soon)
+- [x] Go Lang 1.17
 - [ ] Binary Build Caching
 
 ## Authors
@@ -33,7 +33,7 @@ You can read about it on https://goblin.reaper.im
 
 ## Deploy your own
 
-Since the entire reason for doing this was that delay on the original implementation added a lot more handling and addition of scripts to my website deployments than I liked. 
+Since the entire reason for doing this was that delay on the original implementation added a lot more handling and addition of scripts to my website deployments than I liked.
 
 I wouldn't want that to happen again, so I really recommend people to spin up their own instances if they can afford to do so. If not, you can always use the hosted version from me at [goblin.reaper.im](https://goblin.reaper.im)
 
@@ -41,17 +41,22 @@ I wouldn't want that to happen again, so I really recommend people to spin up th
 
 Let's start
 
-1. Clone the code 
-```sh 
+1. Clone the code
+
+```sh
 git clone https://github.com/barelyhuman/goblin
 ```
-2. Setup docker or any other platform that would allow you to build and run docker images, if using services like Digital Ocean or AWS, you can use their container and docker image specific environments 
-3. Build the image 
+
+2. Setup docker or any other platform that would allow you to build and run docker images, if using services like Digital Ocean or AWS, you can use their container and docker image specific environments
+3. Build the image
+
 ```sh
 cd goblin
 docker build -t goblin:latest .
 ```
-4. And finally push the image to either of the environments as mentioned in point 2. If doing it on a personal compute instance, you can just install docker, do step 3 and then run the below command. 
+
+4. And finally push the image to either of the environments as mentioned in point 2. If doing it on a personal compute instance, you can just install docker, do step 3 and then run the below command.
+
 ```sh
 docker run -p "3000:3000" goblin:latest
 ```

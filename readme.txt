@@ -23,7 +23,7 @@ Also the mentality of both the authors differ.
 FEATURES
 
 - [x] Easy install Script
-- [x] Go Lang 1.16 (1.17 - Coming soon)
+- [x] Go Lang 1.17
 - [ ] Binary Build Caching
 
 

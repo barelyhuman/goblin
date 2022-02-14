@@ -268,7 +268,7 @@
 
 			<div class="space-y-3">
 				<h4 class="font-semibold">Which version of Go is used?</h4>
-				<p>Currently Go 1.16.x via the official golang:1.16 Docker image.</p>
+				<p>Currently Go 1.17.x via the official golang:1.17 Docker image.</p>
 			</div>
 
 			<div class="space-y-3">
