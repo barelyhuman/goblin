@@ -1,14 +1,21 @@
 package resolver
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/google/go-github/v28/github"
+	goSem "github.com/tj/go-semver"
+	"golang.org/x/oauth2"
 
 	"github.com/Masterminds/semver"
 )
@@ -17,16 +24,36 @@ const DEFAULT_PROXY_URL = "https://proxy.golang.org"
 
 const hashRegex = "^[0-9a-f]{7,40}$"
 
+var gh = &GitHub{}
+
 type Resolver struct {
 	Pkg             string
 	Value           string
 	Hash            bool
 	ConstraintCheck *semver.Constraints
+	ghClient        *github.Client
+}
+
+type GitHub struct {
+	// Client is the GitHub client.
+	Client *github.Client
 }
 
 type VersionInfo struct {
 	Version string    // version string
 	Time    time.Time // commit time
+}
+
+func init() {
+	ctx := context.Background()
+
+	ghClient := oauth2.StaticTokenSource(
+		&oauth2.Token{
+			AccessToken: os.Getenv("GITHUB_TOKEN"),
+		},
+	)
+
+	gh.Client = github.NewClient(oauth2.NewClient(ctx, ghClient))
 }
 
 // Resolve the version for the given package by
@@ -35,6 +62,17 @@ type VersionInfo struct {
 func (v *Resolver) ResolveVersion() (string, error) {
 	if len(v.Value) == 0 {
 		version, err := v.ResolveLatestVersion()
+		if err != nil {
+			if v.isGithubPKG() {
+				return v.GithubFallbackResolveVersion()
+			}
+			return "", err
+		}
+
+		if len(version.Version) == 0 {
+			return v.GithubFallbackResolveVersion()
+		}
+
 		return version.Version, err
 	}
 
@@ -42,7 +80,37 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		return v.Value, nil
 	}
 
-	return v.ResolveClosestVersion()
+	versionString, err := v.ResolveClosestVersion()
+	if err != nil {
+		return "", err
+	}
+
+	if len(versionString) == 0 && v.isGithubPKG() {
+		return v.GithubFallbackResolveVersion()
+	}
+
+	return versionString, nil
+}
+
+func (v *Resolver) isGithubPKG() bool {
+	parts := strings.Split(v.Pkg, "/")
+	return parts[0] == "github.com"
+}
+
+func (v *Resolver) GithubFallbackResolveVersion() (string, error) {
+	parts := strings.Split(v.Pkg, "/")
+
+	version := "master"
+	if len(v.Value) == 0 {
+		version = v.Value
+	}
+
+	resolvedV, err := gh.resolve(parts[1], parts[2], version)
+	if err != nil {
+		return "", err
+	}
+
+	return resolvedV, nil
 }
 
 // resolve the latest version from the proxy
@@ -204,4 +272,80 @@ func getVersionLatestProxyURL(pkg string) string {
 func getVersionListProxyURL(pkg string) string {
 	urlPrefix := normalizeUrl(DEFAULT_PROXY_URL)
 	return urlPrefix + "/" + pkg + "/@v/list"
+}
+
+func (g *GitHub) versions(owner, repo string) (versions []string, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	page := 1
+
+	for {
+		options := &github.ListOptions{
+			Page:    page,
+			PerPage: 100,
+		}
+
+		tags, _, err := g.Client.Repositories.ListTags(ctx, owner, repo, options)
+		if err != nil {
+			return nil, fmt.Errorf("listing tags: %w", err)
+		}
+
+		if len(tags) == 0 {
+			break
+		}
+
+		for _, t := range tags {
+			versions = append(versions, t.GetName())
+		}
+
+		page++
+	}
+
+	if len(versions) == 0 {
+		return nil, errors.New("no versions defined")
+	}
+
+	return
+}
+
+// Resolve implementation.
+func (g *GitHub) resolve(owner, repo, version string) (string, error) {
+	// fetch tags
+	tags, err := g.versions(owner, repo)
+	if err != nil {
+		return "", err
+	}
+
+	// convert to semver, ignoring malformed
+	var versions []goSem.Version
+	for _, t := range tags {
+		if v, err := goSem.Parse(t); err == nil {
+			versions = append(versions, v)
+		}
+	}
+
+	// no versions, it has tags but they're not semver
+	if len(versions) == 0 {
+		return "", errors.New("no versions matched")
+	}
+
+	// master special-case
+	if version == "master" {
+		return versions[0].String(), nil
+	}
+
+	// match requested semver range
+	vr, err := goSem.ParseRange(version)
+	if err != nil {
+		return "", fmt.Errorf("parsing version range: %w", err)
+	}
+
+	for _, v := range versions {
+		if vr.Match(v) {
+			return v.String(), nil
+		}
+	}
+
+	return "", errors.New("no versions matched")
 }

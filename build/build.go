@@ -143,7 +143,7 @@ func (bin *Binary) createTempMainFile(dir string) error {
 	var fileDetails strings.Builder
 	fileDetails.Write([]byte("package main\n"))
 	fileDetails.Write([]byte("import(\""))
-	fileDetails.Write([]byte(bin.Module))
+	fileDetails.Write([]byte(bin.Path))
 	fileDetails.Write([]byte("\")"))
 	filePath := path.Join(dir, "main.go")
 	file, err := os.Create(filePath)

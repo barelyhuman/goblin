@@ -66,7 +66,7 @@ func TestParseVersionWithHash(t *testing.T) {
 }
 
 func TestResolveClosestVersion(t *testing.T) {
-	versionToResolve := "v0.0.6"
+	versionToResolve := "0.0.6"
 	inputVersion := "0.0.6"
 	r := Resolver{
 		Pkg: "github.com/barelyhuman/commitlog",
@@ -107,7 +107,7 @@ func TestResolveLatestVersion(t *testing.T) {
 }
 
 func TestResolveVersionWithVersion(t *testing.T) {
-	versionToResolve := "v0.0.7-dev.5"
+	versionToResolve := "0.0.7-dev.5"
 	inputVersion := "0.0.7-dev.5"
 	r := Resolver{
 		Pkg: "github.com/barelyhuman/commitlog",
