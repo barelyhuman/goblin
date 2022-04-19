@@ -88,7 +88,7 @@ func TestResolveClosestVersion(t *testing.T) {
 }
 
 func TestResolveLatestVersion(t *testing.T) {
-	versionToResolve := "v0.0.10"
+	versionToResolve := "v1.0.0"
 	inputVersion := ""
 	r := Resolver{
 		Pkg: "github.com/barelyhuman/commitlog",
@@ -127,7 +127,7 @@ func TestResolveVersionWithVersion(t *testing.T) {
 }
 
 func TestResolveVersionWithoutVersion(t *testing.T) {
-	versionToResolve := "v0.0.10"
+	versionToResolve := "v1.0.0"
 	inputVersion := ""
 	r := Resolver{
 		Pkg: "github.com/barelyhuman/commitlog",
