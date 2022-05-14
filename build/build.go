@@ -86,9 +86,14 @@ func (bin *Binary) WriteBuild(writer io.Writer) error {
 		return err
 	}
 
-	err = bin.buildBinary(dir)
+	err = bin.quickBuildBinary(dir)
 	if err != nil {
-		return err
+		log.Println("Failed to quick build, attempting manual build")
+		err = bin.buildBinary(dir)
+		if err != nil {
+			log.Println("Failed to manual build as fell")
+			return err
+		}
 	}
 
 	f, err := os.Open(bin.Dest)
@@ -161,6 +166,24 @@ func (bin *Binary) runModTidy(dir string) error {
 	cmd.Env = environ()
 	cmd.Dir = dir
 	return command(cmd)
+}
+
+func (bin *Binary) quickBuildBinary(dir string) error {
+	dst, err := tempFilename()
+
+	if err != nil {
+		return err
+	}
+
+	bin.Dest = dst
+	cmd := exec.Command("go", "build", "-o", bin.Dest, bin.Module)
+	cmd.Env = environ()
+	cmd.Env = append(cmd.Env, "CGO_ENABLED=0")
+	cmd.Env = append(cmd.Env, "GOOS="+bin.OS)
+	cmd.Env = append(cmd.Env, "GOARCH="+bin.Arch)
+	cmd.Dir = dir
+	return command(cmd)
+
 }
 
 func (bin *Binary) buildBinary(dir string) error {
