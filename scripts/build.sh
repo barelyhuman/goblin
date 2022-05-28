@@ -15,4 +15,5 @@ ln -sf ./www/build ./static
 
 # build the go server 
 go build -o ./goblin-api ./cmd/goblin-api 
-pm2 start goblin-api
+pm2 stop goblin-api
+pm2 start goblin-api -- --env .env

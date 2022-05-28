@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"io"
@@ -8,10 +9,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/barelyhuman/goblin/build"
 	"github.com/barelyhuman/goblin/resolver"
+	"github.com/joho/godotenv"
 )
 
 var shTemplates *template.Template
@@ -49,11 +52,9 @@ func BlankReq(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Link", "rel=\"shortcut icon\" href=\"#\"")
 }
 
-func StartServer() {
+func StartServer(port string) {
 	http.Handle("/favicon.ico", http.HandlerFunc(BlankReq))
 	http.Handle("/", http.HandlerFunc(HandleRequest))
-
-	port := envDefault("PORT", "3000")
 
 	fmt.Println(">> Listening on " + port)
 	err := http.ListenAndServe(":"+port, nil)
@@ -73,6 +74,17 @@ func envDefault(key string, def string) string {
 // TODO: cleanup code
 // TODO: move everything into their own interface/structs
 func main() {
+
+	envFile := flag.String("env", ".env", "path to read the env config from")
+	portFlag := flag.Int("port", 3000, "default port")
+
+	flag.Parse()
+
+	err := godotenv.Load(*envFile)
+	if err != nil {
+		log.Panic("Couldn't load env")
+	}
+
 	shTemplates = template.Must(template.ParseGlob("templates/*"))
 	serverURL = envDefault("ORIGIN_URL", "http://localhost:3000")
 
@@ -84,7 +96,7 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	StartServer()
+	StartServer(strconv.Itoa(*portFlag))
 }
 
 func normalizePackage(pkg string) string {

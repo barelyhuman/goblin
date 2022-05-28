@@ -4,6 +4,12 @@
 	import Transition from '$lib/transition.svelte'
 	import HitsCounter from '$lib/hits-counter.svelte'
 	import LinkButton from '$lib/link-button.svelte'
+
+	let url = 'http://goblin.reaper.im'
+
+	if (import.meta && import.meta.env) {
+		url = import.meta.env.VITE_GOBLIN_ORIGIN_URL
+	}
 </script>
 
 <section class="py-20 min-h-[calc(100vh-5rem)]">
@@ -27,9 +33,7 @@
 			from="opacity-0 translate-y-3"
 			to="opacity-1 translate-y-0"
 		>
-			<Command
-				command="curl -sf https://goblin.reaper.im/github.com/rakyll/hey | sh"
-			/>
+			<Command command="curl -sf {url}/github.com/rakyll/hey | sh" />
 		</Transition>
 
 		<div class="pt-4 space-x-4 flex items-center">
@@ -110,9 +114,7 @@
 					>
 				</p>
 
-				<Command
-					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | sh"
-				/>
+				<Command command="curl -sf {url}/<PKG>[@VERSION] | sh" />
 
 				<p class="text-muted text-xs leading-6">
 					Note: the <InlineCode>PKG</InlineCode> part has to contain the entire package
@@ -130,9 +132,7 @@
 					>
 				</p>
 
-				<Command
-					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | PREFIX=/tmp sh"
-				/>
+				<Command command="curl -sf {url}/<PKG>[@VERSION] | PREFIX=/tmp sh" />
 
 				<p class="text-muted text-xs">
 					The directory will be created if it does not exist.
@@ -153,7 +153,7 @@
 				</p>
 
 				<Command
-					command="curl -sf https://goblin.reaper.im/<PKG>[@VERSION] | OUT=example.exe sh"
+					command="curl -sf {url}/<PKG>[@VERSION] | OUT=example.exe sh"
 				/>
 
 				<p class="text-muted text-xs">
@@ -173,9 +173,7 @@
 					Install the latest version of <InlineCode>hey</InlineCode>
 				</p>
 
-				<Command
-					command="curl -sf https://goblin.reaper.im/github.com/rakyll/hey | sh"
-				/>
+				<Command command="curl -sf {url}/github.com/rakyll/hey | sh" />
 			</div>
 
 			<div class="space-y-3">
@@ -184,7 +182,7 @@
 				</p>
 
 				<Command
-					command="curl -sf https://goblin.reaper.im/github.com/barelyhuman/statico@v0.0.7 | sh"
+					command="curl -sf {url}/github.com/barelyhuman/statico@v0.0.7 | sh"
 				/>
 
 				<p class="text-muted text-xs">
@@ -201,9 +199,7 @@
 					>
 				</p>
 
-				<Command
-					command="curl -sf https://goblin.reaper.im/golang.org/x/tools/godoc | sh"
-				/>
+				<Command command="curl -sf {url}/golang.org/x/tools/godoc | sh" />
 			</div>
 		</div>
 	</div>
@@ -224,7 +220,7 @@
 
 				<Command
 					hidePrefix
-					command="https://goblin.reaper.im/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3&out=hey"
+					command="{url}/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3&out=hey"
 				/>
 
 				<p>
@@ -288,7 +284,7 @@
 				</p>
 				<Command
 					hidePrefix
-					command="curl -sf https://goblin.reaper.im/github.com/barelyhuman/commitlog@bba8d7a63d622e4f12dbea9722b647cd985be8ad"
+					command="curl -sf {url}/github.com/barelyhuman/commitlog@bba8d7a63d622e4f12dbea9722b647cd985be8ad"
 				/>
 			</div>
 		</div>
