@@ -88,17 +88,10 @@
 				<LinkButton
 					external
 					variant="secondary"
-					href="https://ko-fi.com/barelyreaper"
+					href="https://github.com/sponsors/barelyhuman"
 				>
-					One time
+					Donate
 				</LinkButton>
-
-				<LinkButton
-					external
-					additionalClasses="ml-2"
-					variant="secondary"
-					href="https://liberapay.com/reaper">Recurring</LinkButton
-				>
 			</div>
 		</div>
 	</div>
