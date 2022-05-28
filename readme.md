@@ -47,19 +47,66 @@ Let's start
 git clone https://github.com/barelyhuman/goblin
 ```
 
-2. Setup docker or any other platform that would allow you to build and run docker images, if using services like Digital Ocean or AWS, you can use their container and docker image specific environments
-3. Build the image
+#### Using Docker
+
+1. Setup docker or any other platform that would allow you to build and run docker images, if using services like Digital Ocean or AWS, you can use their container and docker image specific environments
+2. Build the image
 
 ```sh
 cd goblin
 docker build -t goblin:latest .
 ```
 
-4. And finally push the image to either of the environments as mentioned in point 2. If doing it on a personal compute instance, you can just install docker, do step 3 and then run the below command.
+3. And finally push the image to either of the environments as mentioned in point 1. If doing it on a personal compute instance, you can just install docker, do step 3 and then run the below command.
 
 ```sh
 docker run -p "3000:3000" goblin:latest
 ```
+
+#### Using Traditional Servers
+
+Let's face it, docker can be heavy and sometimes it's easier to run these apps separately as a simple service.
+
+Much like most go lang projects, goblin can be built into a single binary and run on any open port.
+
+The repo comes with helper scripts to setup an ubuntu server with the required stuff
+
+1. Caddy for server
+2. Go and Node for language support
+3. PM2 as a process manager and start the process in the background
+
+You can run it like so
+
+```sh
+./scripts/prepare-ubuntu.sh
+```
+
+If you already have all the above setup separately, you can modify the build script and run that instead. 
+
+```sh 
+./scripts/build.sh
+```
+
+You'll have to create 2 `.env` files, one inside `www` and one at the root `.env`
+
+```sh
+# .env
+
+# token from github that allows authentication for resolving versions from go modules as github repositories
+GITHUB_TOKEN=
+#  the url that you want the server to use for creating scripts
+ORIGIN_URL=
+```
+
+```sh
+# www/.env
+
+# the same url as ORIGIN_URL but added again because vite needs it in the repo
+VITE_GOBLIN_ORIGIN_URL=
+```
+
+running the `build.sh` should handle building with the needed env files and restarting the server for you.
+
 
 ## License
 
