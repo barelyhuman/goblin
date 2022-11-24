@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"html/template"
@@ -9,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/barelyhuman/goblin/build"
@@ -64,7 +64,7 @@ func StartServer(port string) {
 }
 
 func envDefault(key string, def string) string {
-	if s := os.Getenv(key); s == "" {
+	if s := os.Getenv(key); len(strings.TrimSpace(s)) == 0 {
 		return def
 	} else {
 		return s
@@ -76,13 +76,15 @@ func envDefault(key string, def string) string {
 func main() {
 
 	envFile := flag.String("env", ".env", "path to read the env config from")
-	portFlag := flag.Int("port", 3000, "default port")
+	portFlag := envDefault("PORT", "3000")
 
 	flag.Parse()
 
-	err := godotenv.Load(*envFile)
-	if err != nil {
-		log.Panic("Couldn't load env")
+	if _, err := os.Stat(*envFile); !errors.Is(err, os.ErrNotExist) {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file", err)
+		}
 	}
 
 	shTemplates = template.Must(template.ParseGlob("templates/*"))
@@ -96,7 +98,7 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	StartServer(strconv.Itoa(*portFlag))
+	StartServer(portFlag)
 }
 
 func normalizePackage(pkg string) string {
