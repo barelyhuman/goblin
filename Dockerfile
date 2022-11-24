@@ -14,6 +14,7 @@ RUN mkdir -p ./static
 COPY --from="website-builder" /www/build ./static
 RUN go build -o /server cmd/goblin-api/main.go
 
-EXPOSE 3000
+ENV PORT=3000
+EXPOSE $PORT
 
 CMD [ "/server" ]
