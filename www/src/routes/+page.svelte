@@ -5,11 +5,7 @@
 	import HitsCounter from '$lib/hits-counter.svelte'
 	import LinkButton from '$lib/link-button.svelte'
 
-	let url = 'http://goblin.reaper.im'
-
-	if (import.meta && import.meta.env) {
-		url = import.meta.env.VITE_GOBLIN_ORIGIN_URL
-	}
+	let url = import.meta.env.VITE_GOBLIN_ORIGIN_URL || 'http://goblin.reaper.im'
 </script>
 
 <section class="py-20 min-h-[calc(100vh-5rem)]">
