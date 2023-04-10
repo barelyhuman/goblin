@@ -29,13 +29,13 @@ Also the mentality of both the authors differ.
 
 ## Usage
 
-You can read about it on https://goblin.reaper.im
+You can read about it on https://goblin.barelyhuman.xyz
 
 ## Deploy your own
 
 Since the entire reason for doing this was that delay on the original implementation added a lot more handling and addition of scripts to my website deployments than I liked.
 
-I wouldn't want that to happen again, so I really recommend people to spin up their own instances if they can afford to do so. If not, you can always use the hosted version from me at [goblin.reaper.im](https://goblin.reaper.im)
+I wouldn't want that to happen again, so I really recommend people to spin up their own instances if they can afford to do so. If not, you can always use the hosted version from me at [goblin.barelyhuman.xyz](https://goblin.barelyhuman.xyz)
 
 **Note:the original code for gobinaries is equally simple to use and deploy but you'll have to make a few tweaks to the original code to make it work in a simpler fashion**
 
