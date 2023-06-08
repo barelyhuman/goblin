@@ -2,6 +2,8 @@ package resolver
 
 import (
 	"testing"
+
+	"github.com/Masterminds/semver"
 )
 
 func TestGetVersionListProxyURL(t *testing.T) {
@@ -127,7 +129,7 @@ func TestResolveVersionWithVersion(t *testing.T) {
 }
 
 func TestResolveVersionWithoutVersion(t *testing.T) {
-	versionToResolve := "v1.0.0"
+
 	inputVersion := ""
 	r := Resolver{
 		Pkg: "github.com/barelyhuman/commitlog",
@@ -141,8 +143,11 @@ func TestResolveVersionWithoutVersion(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to resolve, err:%v", err)
 	}
-	if version != versionToResolve {
-		t.Fatalf("Failed to resolve, resolved:%v,expected resolve:%v", version, versionToResolve)
+
+	_, err = semver.NewVersion(version)
+
+	if err != nil {
+		t.Fatalf("Failed as the version received wasn't a semver, err:%v", err)
 	}
 }
 

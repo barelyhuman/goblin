@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -13,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-github/v28/github"
+	"github.com/google/go-github/v53/github"
 	goSem "github.com/tj/go-semver"
 	"golang.org/x/oauth2"
 
@@ -47,13 +48,19 @@ type VersionInfo struct {
 func init() {
 	ctx := context.Background()
 
-	ghClient := oauth2.StaticTokenSource(
-		&oauth2.Token{
-			AccessToken: os.Getenv("GITHUB_TOKEN"),
-		},
-	)
+	authToken := os.Getenv("GITHUB_TOKEN")
 
-	gh.Client = github.NewClient(oauth2.NewClient(ctx, ghClient))
+	if len(authToken) > 0 {
+		ghClient := oauth2.StaticTokenSource(
+			&oauth2.Token{
+				AccessToken: os.Getenv("GITHUB_TOKEN"),
+			},
+		)
+		gh.Client = github.NewClient(oauth2.NewClient(ctx, ghClient))
+	} else {
+		gh.Client = github.NewClient(nil)
+	}
+
 }
 
 // Resolve the version for the given package by
@@ -61,19 +68,43 @@ func init() {
 // or getting the latest version on the proxy
 func (v *Resolver) ResolveVersion() (string, error) {
 	if len(v.Value) == 0 {
-		version, err := v.ResolveLatestVersion()
-		if err != nil {
-			if v.isGithubPKG() {
-				return v.GithubFallbackResolveVersion()
-			}
-			return "", err
+		proxyVersion, proxyErr := v.ResolveLatestVersion()
+
+		var fallbackErr error
+		var fallbackVersion string
+
+		if v.isGithubPKG() {
+			fallbackVersion, fallbackErr = v.GithubFallbackResolveVersion()
 		}
 
-		if len(version.Version) == 0 {
+		if fallbackErr != nil {
+			log.Println("Failed to resolve from Github Tags")
+		}
+
+		if proxyErr != nil && fallbackErr != nil {
+			return "", fmt.Errorf(`failed to resolve version from both github and proxy, %w, %w`, proxyErr, fallbackErr)
+		}
+
+		log.Println("proxy has no version:condition")
+		if len(proxyVersion.Version) == 0 {
+			log.Println("proxy has no version:in")
 			return v.GithubFallbackResolveVersion()
 		}
 
-		return version.Version, err
+		// In case the value from the fallback (github's tag version )
+		// is greater than the version from proxy (proxy.golang) then
+		// pick the version from the fallback
+		if isSemver(fallbackVersion) && isSemver(proxyVersion.Version) &&
+			semver.MustParse(fallbackVersion).GreaterThan(semver.MustParse(proxyVersion.Version)) {
+			return fallbackVersion, nil
+		}
+
+		var err error
+		if proxyErr != nil || fallbackErr != nil {
+			err = fmt.Errorf(`%w, %w`, proxyErr, fallbackErr)
+		}
+
+		return proxyVersion.Version, err
 	}
 
 	if v.Hash {
@@ -100,6 +131,7 @@ func (v *Resolver) isGithubPKG() bool {
 func (v *Resolver) GithubFallbackResolveVersion() (string, error) {
 	parts := strings.Split(v.Pkg, "/")
 
+	// TODO: handle the latest branch to also be considering `main` and `dev`
 	version := "master"
 	if len(v.Value) == 0 {
 		version = v.Value
