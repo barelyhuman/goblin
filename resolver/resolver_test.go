@@ -3,6 +3,8 @@ package resolver
 import (
 	"testing"
 
+	"regexp"
+
 	"github.com/Masterminds/semver"
 )
 
@@ -132,7 +134,7 @@ func TestResolveVersionWithoutVersion(t *testing.T) {
 
 	inputVersion := ""
 	r := Resolver{
-		Pkg: "github.com/barelyhuman/commitlog",
+		Pkg: "github.com/barelyhuman/alvu",
 	}
 	err := r.ParseVersion(inputVersion)
 	if err != nil {
@@ -149,6 +151,34 @@ func TestResolveVersionWithoutVersion(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed as the version received wasn't a semver, err:%v", err)
 	}
+}
+
+// Expects a commit hash instead of a version tag
+// since the package on github has a higher version
+// than what's available on the proxy
+func TestResolveVersionForConflictingPackages(t *testing.T) {
+
+	inputVersion := ""
+	r := Resolver{
+		Pkg: "github.com/barelyhuman/commitlog",
+	}
+	err := r.ParseVersion(inputVersion)
+	if err != nil {
+		t.Fatalf("Failed to parse version, err:%v", err)
+	}
+
+	version, err := r.ResolveVersion()
+	if err != nil {
+		t.Fatalf("Failed to resolve, err:%v", err)
+	}
+
+	pttrn := regexp.MustCompile("[a-zA-Z0-9]+")
+	matchedVal := pttrn.Find([]byte(version))
+
+	if len(string(matchedVal)) <= 0 {
+		t.Fatalf("Failed to resolve version as a hash for the conflicting package, err:%v", err)
+	}
+
 }
 
 func TestResolveVersionWithHash(t *testing.T) {

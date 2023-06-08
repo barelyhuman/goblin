@@ -34,6 +34,16 @@ type Resolver struct {
 	ConstraintCheck *semver.Constraints
 }
 
+type Plumbing struct {
+	Hash    string
+	Version string
+}
+
+type PlumbingWithRange struct {
+	Version goSem.Version
+	Hash    string
+}
+
 type GitHub struct {
 	// Client is the GitHub client.
 	Client *github.Client
@@ -69,7 +79,7 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		proxyVersion, proxyErr := v.ResolveLatestVersion()
 
 		var fallbackErr error
-		var fallbackVersion string
+		var fallbackVersion PlumbingWithRange
 
 		if v.isGithubPKG() {
 			fallbackVersion, fallbackErr = v.GithubFallbackResolveVersion()
@@ -85,16 +95,16 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		}
 
 		if len(proxyVersion.Version) == 0 {
-			log.Println("proxy has no version:in")
-			return v.GithubFallbackResolveVersion()
+			fallbackVersion, err := v.GithubFallbackResolveVersion()
+			return fallbackVersion.Hash, err
 		}
 
 		// In case the value from the fallback (github's tag version )
 		// is greater than the version from proxy (proxy.golang) then
 		// pick the version from the fallback
-		if isSemver(fallbackVersion) && isSemver(proxyVersion.Version) &&
-			semver.MustParse(fallbackVersion).GreaterThan(semver.MustParse(proxyVersion.Version)) {
-			return fallbackVersion, nil
+		if isSemver(fallbackVersion.Version.String()) && isSemver(proxyVersion.Version) &&
+			semver.MustParse(fallbackVersion.Version.String()).GreaterThan(semver.MustParse(proxyVersion.Version)) {
+			return fallbackVersion.Hash, nil
 		}
 
 		if proxyErr != nil || fallbackErr != nil {
@@ -114,7 +124,8 @@ func (v *Resolver) ResolveVersion() (string, error) {
 	}
 
 	if len(versionString) == 0 && v.isGithubPKG() {
-		return v.GithubFallbackResolveVersion()
+		fallbackVersion, err := v.GithubFallbackResolveVersion()
+		return fallbackVersion.Hash, err
 	}
 
 	return versionString, nil
@@ -125,7 +136,7 @@ func (v *Resolver) isGithubPKG() bool {
 	return parts[0] == "github.com"
 }
 
-func (v *Resolver) GithubFallbackResolveVersion() (string, error) {
+func (v *Resolver) GithubFallbackResolveVersion() (PlumbingWithRange, error) {
 	parts := strings.Split(v.Pkg, "/")
 
 	// TODO: handle the latest branch to also be considering `main` and `dev`
@@ -136,7 +147,7 @@ func (v *Resolver) GithubFallbackResolveVersion() (string, error) {
 
 	resolvedV, err := gh.resolve(parts[1], parts[2], version)
 	if err != nil {
-		return "", err
+		return PlumbingWithRange{}, err
 	}
 
 	return resolvedV, nil
@@ -303,7 +314,7 @@ func getVersionListProxyURL(pkg string) string {
 	return urlPrefix + "/" + pkg + "/@v/list"
 }
 
-func (g *GitHub) versions(owner, repo string) (versions []string, err error) {
+func (g *GitHub) versions(owner, repo string) (versions []Plumbing, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
@@ -324,8 +335,13 @@ func (g *GitHub) versions(owner, repo string) (versions []string, err error) {
 			break
 		}
 
+		// FIXME: parse the version right here
+		// instead of parsing it during a range check
 		for _, t := range tags {
-			versions = append(versions, t.GetName())
+			versions = append(versions, Plumbing{
+				Version: t.GetName(),
+				Hash:    t.GetCommit().GetSHA(),
+			})
 		}
 
 		page++
@@ -339,42 +355,45 @@ func (g *GitHub) versions(owner, repo string) (versions []string, err error) {
 }
 
 // Resolve implementation.
-func (g *GitHub) resolve(owner, repo, version string) (string, error) {
+func (g *GitHub) resolve(owner, repo, version string) (PlumbingWithRange, error) {
 	// fetch tags
 	tags, err := g.versions(owner, repo)
 	if err != nil {
-		return "", err
+		return PlumbingWithRange{}, err
 	}
 
 	// convert to semver, ignoring malformed
-	var versions []goSem.Version
+	var versions []PlumbingWithRange
 	for _, t := range tags {
-		if v, err := goSem.Parse(t); err == nil {
-			versions = append(versions, v)
+		if v, err := goSem.Parse(t.Version); err == nil {
+			versions = append(versions, PlumbingWithRange{
+				Version: v,
+				Hash:    t.Hash,
+			})
 		}
 	}
 
 	// no versions, it has tags but they're not semver
 	if len(versions) == 0 {
-		return "", errors.New("no versions matched")
+		return PlumbingWithRange{}, errors.New("no versions matched")
 	}
 
 	// master special-case
 	if version == "master" {
-		return versions[0].String(), nil
+		return versions[0], nil
 	}
 
 	// match requested semver range
 	vr, err := goSem.ParseRange(version)
 	if err != nil {
-		return "", fmt.Errorf("parsing version range: %w", err)
+		return PlumbingWithRange{}, fmt.Errorf("parsing version range: %w", err)
 	}
 
 	for _, v := range versions {
-		if vr.Match(v) {
-			return v.String(), nil
+		if vr.Match(v.Version) {
+			return v, nil
 		}
 	}
 
-	return "", errors.New("no versions matched")
+	return PlumbingWithRange{}, errors.New("no versions matched")
 }
