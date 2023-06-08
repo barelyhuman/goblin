@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	github.com/Masterminds/semver v1.5.0
-	github.com/barelyhuman/gomon v0.0.0-20221229194820-3efe42d58737 // indirect
 	github.com/google/go-github/v53 v53.0.0
 	github.com/joho/godotenv v1.5.1
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect

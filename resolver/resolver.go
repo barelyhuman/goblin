@@ -32,7 +32,6 @@ type Resolver struct {
 	Value           string
 	Hash            bool
 	ConstraintCheck *semver.Constraints
-	ghClient        *github.Client
 }
 
 type GitHub struct {
@@ -60,7 +59,6 @@ func init() {
 	} else {
 		gh.Client = github.NewClient(nil)
 	}
-
 }
 
 // Resolve the version for the given package by
@@ -82,10 +80,10 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		}
 
 		if proxyErr != nil && fallbackErr != nil {
-			return "", fmt.Errorf(`failed to resolve version from both github and proxy, %w, %w`, proxyErr, fallbackErr)
+			log.Println(proxyErr, fallbackErr)
+			return "", fmt.Errorf(`failed to get any version from both proxy and fallback`)
 		}
 
-		log.Println("proxy has no version:condition")
 		if len(proxyVersion.Version) == 0 {
 			log.Println("proxy has no version:in")
 			return v.GithubFallbackResolveVersion()
@@ -99,12 +97,11 @@ func (v *Resolver) ResolveVersion() (string, error) {
 			return fallbackVersion, nil
 		}
 
-		var err error
 		if proxyErr != nil || fallbackErr != nil {
-			err = fmt.Errorf(`%w, %w`, proxyErr, fallbackErr)
+			return "", fmt.Errorf(`failed to get any version from both proxy and fallback`)
 		}
 
-		return proxyVersion.Version, err
+		return proxyVersion.Version, nil
 	}
 
 	if v.Hash {
