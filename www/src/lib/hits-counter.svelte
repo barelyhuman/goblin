@@ -1,27 +1,27 @@
 <script>
 	import { onMount } from 'svelte'
 	export let count = 0
-	const url = 'https://goblin.reaper.im'
+	const urls = ['https://goblin.barelyhuman.xyz', 'https://goblin.run']
 	onMount(async () => {
-		fetch(
-			`https://api.hits.link/v1/hits?border=square&json=true&bgRight=27272a&bgLeft=27272a&url=${url}`
-		)
-			.then((response) => {
-				console.log({ response })
+		urls.forEach((url) => {
+			fetch(
+				`https://api.hits.link/v1/hits?border=square&json=true&bgRight=27272a&bgLeft=27272a&url=${url}`
+			)
+				.then((response) => {
+					if (!response.ok) {
+						throw response
+					}
 
-				if (!response.ok) {
-					throw response
-				}
-
-				return response.json()
-			})
-			.then((data) => {
-				count = data.data.hits
-			})
-			.catch((error) => {
-				console.log(error)
-				count = 0
-			})
+					return response.json()
+				})
+				.then((data) => {
+					count += data.data.hits
+				})
+				.catch((error) => {
+					console.log(error)
+					count += 0
+				})
+		})
 	})
 </script>
 
