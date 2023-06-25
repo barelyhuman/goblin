@@ -279,7 +279,6 @@
 		</div>
 	</div>
 	<div>
-		<!-- Hits.link is down -->
-		<!-- <HitsCounter /> -->
+		<HitsCounter />
 	</div>
 </section>

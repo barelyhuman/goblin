@@ -4,9 +4,7 @@
 	const urls = ['https://goblin.barelyhuman.xyz', 'https://goblin.run']
 	onMount(async () => {
 		urls.forEach((url) => {
-			fetch(
-				`https://api.hits.link/v1/hits?border=square&json=true&bgRight=27272a&bgLeft=27272a&url=${url}`
-			)
+			fetch(`https://hits.goblin.run/hits?url=${url}`)
 				.then((response) => {
 					if (!response.ok) {
 						throw response
@@ -15,7 +13,7 @@
 					return response.json()
 				})
 				.then((data) => {
-					count += data.data.hits
+					count += data.count
 				})
 				.catch((error) => {
 					console.log(error)
