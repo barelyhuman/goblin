@@ -9,7 +9,7 @@
 		/>
 		<title>goblin</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-    %sveltekit.head%
+		%sveltekit.head%
 
 		<noscript>
 			<style>
@@ -24,4 +24,9 @@
 	<body>
 		<div id="svelte">%sveltekit.body%</div>
 	</body>
+	<script defer>
+		fetch(`https://hits.goblin.run/hit?url=${window.location.href}`).then((r) =>
+			r.text()
+		)
+	</script>
 </html>
