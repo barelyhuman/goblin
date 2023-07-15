@@ -3,7 +3,7 @@
 Install `package` with optional `@version` and `options`:
 
 ```command
-curl -sf http://goblin.run/<package>[@version] | [...options] sh
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/<package>[@version] | [...options] sh
 ```
 
 ## API
@@ -51,25 +51,25 @@ gopkg.in/yaml.v2
 Install the latest version:
 
 ```command
-curl -sf http://goblin.run/github.com/rakyll/hey | sh
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/github.com/rakyll/hey | sh
 ```
 
 Specify package version:
 
 ```command
-curl -sf http://goblin.run/github.com/barelyhuman/statico@v0.0.7 | sh
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/github.com/barelyhuman/statico@v0.0.7 | sh
 ```
 
 Or use commit hashes:
 
 ```command
-curl -sf http://goblin.run/github.com/barelyhuman/commitlog@bba8d7a63d622e4f12dbea9722b647cd985be8ad | sh
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/github.com/barelyhuman/commitlog@bba8d7a63d622e4f12dbea9722b647cd985be8ad | sh
 ```
 
 Use alternative sources:
 
 ```command
-curl -sf http://goblin.run/golang.org/x/tools/godoc | sh
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/golang.org/x/tools/godoc | sh
 ```
 
 ## How does it work?
@@ -81,7 +81,7 @@ The response of this request is a Golang binary compiled for the requested opera
 **Example response**
 
 ```sh
-http://goblin.run/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3&out=hey
+{{.Data.env.GOBLIN_ORIGIN_URL}}/binary/github.com/rakyll/hey?os=darwin&arch=amd64&version=v0.1.3&out=hey
 ```
 
 _Note: compilation is limited to 200 seconds due to timeout restrictions._
