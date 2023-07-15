@@ -2,7 +2,7 @@
 
 build:
 	./bin/alvu
-	./bin/tailwindcss -i ./main.css -o ./dist/style.css --minify
+	./bin/tailwindcss -i ./assets/main.css -o ./dist/style.css --minify
 
 install:
 	mkdir -p ./bin
@@ -20,10 +20,10 @@ clean:
 	rm ./bin/alvu ./bin/tailwindcss
 
 watchStyles:
-	./bin/tailwindcss -i ./main.css -o ./dist/style.css --watch
+	./bin/tailwindcss -i ./assets/main.css -o ./dist/style.css --watch
 
 watchPages:
-	ls ./pages/*.{html,md} | entr -cr ./bin/alvu -serve
+	alvu -serve
 
 watch:
 	${MAKE} -j4 watchPages watchStyles 
