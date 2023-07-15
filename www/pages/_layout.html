@@ -23,10 +23,18 @@
 		</script>
 	</head>
 
-	<body
-		x-data="{ copied: false, hits: 0 }"
-		x-init="fetch(`https://hits.goblin.run?url=${window.location.href}`).then((r) => r.text())"
-	>
+	<body x-data="{
+		copied: false,
+		hits: 0,
+		async init() {
+			const registerHit = await fetch(
+				`https://hits.goblin.run/hit?url=${window.location.href}`
+			);
+			const hitsCount =
+				await await `https://hits.goblin.run/hits?url=${window.location.href}`;
+			this.hits = hitsCount.count
+		},
+	}">
 		<a href="#content" class="sr-only">Skip to main content</a>
 
 		<nav
@@ -199,5 +207,7 @@
 				</p>
 			</div>
 		</footer>
+
+		
 	</body>
 </html>
