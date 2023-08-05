@@ -32,22 +32,33 @@
 					return fallBackCopy(strToCopy);
 				}
 
-				navigator.permissions
-					.query({ name: "clipboard-write" })
-					.then((result) => {
-						if (result.state == "granted" || result.state == "prompt") {
-							navigator.clipboard.writeText(strToCopy).then(
-								function () {
-									// ignore and digest
-								},
-								function () {
-									return fallBackCopy(strToCopy);
-								}
-							);
-						} else {
+				function _runCopy() {
+					navigator.clipboard.writeText(strToCopy).then(
+						function () {
+							// ignore and digest
+						},
+						function () {
 							return fallBackCopy(strToCopy);
 						}
-					});
+					);
+				}
+
+				// If not chrome, then just run the copy and if it errors
+				// let the fallback handle it
+				// If chrome, then the permission is checked and if no permissions
+				// are enabled then the fallback is run
+				if (!navigator.userAgent.includes("Chrome")) {
+					_runCopy();
+				} else {
+					navigator.permissions
+						.query({ name: "clipboard-write" })
+						.then((result) => {
+							if (result.state == "granted" || result.state == "prompt") {
+							} else {
+								return fallBackCopy(strToCopy);
+							}
+						});
+				}
 			}
 
 			function fallBackCopy(strToCopy) {
