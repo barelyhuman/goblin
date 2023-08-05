@@ -10,6 +10,7 @@ make installLinux
 make build
 cd ..
 
+rm -rf ./static
 ln -sf ./www/dist ./static
 
 # build the go server 
