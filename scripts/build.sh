@@ -7,7 +7,10 @@ cd www
 # if using darwin arm64, uncomment the next line
 # make install
 make installLinux
-ln -sf ./www/build ./static
+make build
+cd ..
+
+ln -sf ./www/dist ./static
 
 # build the go server 
 go build -o ./goblin-api ./cmd/goblin-api 
