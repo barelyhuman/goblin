@@ -16,6 +16,19 @@ install:
 	chmod +x ./tailwindcss-macos-arm64
 	mv tailwindcss-macos-arm64 ./bin/tailwindcss
 
+installLinux:
+	mkdir -p ./bin
+	# Downloading alvu
+	# https://github.com/barelyhuman/alvu
+	curl -sf https://goblin.run/github.com/barelyhuman/alvu | PREFIX=./bin sh
+	chmod +x ./bin/alvu
+	# Downloading Tailwind CSS CLI for linux amd64
+	# https://github.com/tailwindlabs/tailwindcss/releases/latest
+	curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+	chmod +x ./tailwindcss-linux-x64
+	mv tailwindcss-linux-x64 ./bin/tailwindcss
+
+
 clean:
 	rm ./bin/alvu ./bin/tailwindcss
 
