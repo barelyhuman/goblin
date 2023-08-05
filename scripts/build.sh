@@ -2,15 +2,11 @@
 
 set -euxo pipefail
 
-
 # build the web project 
-. ~/.nvm/nvm.sh
-nvm use 
-npm i -g yarn 
 cd www 
-yarn
-yarn build 
-cd  ..
+# if using darwin arm64, uncomment the next line
+# make install
+make installLinux
 ln -sf ./www/build ./static
 
 # build the go server 
