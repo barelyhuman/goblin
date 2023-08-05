@@ -84,7 +84,7 @@
 				`https://hits.goblin.run/hit?url=${window.location.href}`
 			);
 			const hitsCount =
-				await await `https://hits.goblin.run/hits?url=${window.location.href}`;
+				await fetch(`https://hits.goblin.run/hits?url=${window.location.href}`).then(d=>d.json());
 			this.hits = hitsCount.count
 		},
 	}"
