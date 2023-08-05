@@ -17,13 +17,55 @@
 		<script>
 			document.addEventListener("alpine:init", () => {
 				Alpine.magic("clipboard", () => {
-					return (subject) => navigator.clipboard.writeText(subject);
+					return (subject) => copyToClipboard(subject);
 				});
 			});
+
+			// copy to clipboard with fallback for protocols
+			// and navigator permissions
+			function copyToClipboard(strToCopy) {
+				if (window.location.protocol === "http:") {
+					return fallBackCopy(strToCopy);
+				}
+
+				if (!(navigator && navigator.clipboard)) {
+					return fallBackCopy(strToCopy);
+				}
+
+				navigator.permissions
+					.query({ name: "clipboard-write" })
+					.then((result) => {
+						if (result.state == "granted" || result.state == "prompt") {
+							navigator.clipboard.writeText(strToCopy).then(
+								function () {
+									// ignore and digest
+								},
+								function () {
+									return fallBackCopy(strToCopy);
+								}
+							);
+						} else {
+							return fallBackCopy(strToCopy);
+						}
+					});
+			}
+
+			function fallBackCopy(strToCopy) {
+				const el = document.createElement("textarea");
+				el.value = strToCopy;
+				el.setAttribute("readonly", "");
+				el.style.position = "absolute";
+				el.style.left = "-9999px";
+				document.body.appendChild(el);
+				el.select();
+				document.execCommand("copy");
+				document.body.removeChild(el);
+			}
 		</script>
 	</head>
 
-	<body x-data="{
+	<body
+		x-data="{
 		copied: false,
 		hits: 0,
 		async init() {
@@ -34,7 +76,8 @@
 				await await `https://hits.goblin.run/hits?url=${window.location.href}`;
 			this.hits = hitsCount.count
 		},
-	}">
+	}"
+	>
 		<a href="#content" class="sr-only">Skip to main content</a>
 
 		<nav
@@ -207,7 +250,5 @@
 				</p>
 			</div>
 		</footer>
-
-		
 	</body>
 </html>
