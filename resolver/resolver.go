@@ -107,10 +107,6 @@ func (v *Resolver) ResolveVersion() (string, error) {
 			return fallbackVersion.Hash, nil
 		}
 
-		if proxyErr != nil || fallbackErr != nil {
-			return "", fmt.Errorf(`failed to get any version from both proxy and fallback`)
-		}
-
 		return proxyVersion.Version, nil
 	}
 
