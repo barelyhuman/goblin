@@ -92,18 +92,22 @@ func (bin *Binary) WriteBuild(writer io.Writer) error {
 		return err
 	}
 
-	err = nil
 	if !bin.isUsingCobra(dir) {
 		err = bin.quickBuildBinary(dir)
 		if err != nil {
 			log.Println("Failed to quick build, attempting manual build")
+			err = bin.buildBinary(dir)
+			if err != nil {
+				log.Println("Failed to manual build as fell")
+				return err
+			}
 		}
-	}
-
-	err = bin.buildBinary(dir)
-	if err != nil {
-		log.Println("Failed to manual build as fell")
-		return err
+	} else {
+		err = bin.buildBinary(dir)
+		if err != nil {
+			log.Println("Failed to manual build as fell")
+			return err
+		}
 	}
 
 	f, err := os.Open(bin.Dest)
