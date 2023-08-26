@@ -46,6 +46,13 @@ gopkg.in/yaml.v2
 ... | OUT=example.exe sh
 ```
 
+`CMD_PATH` - Path to the binary package (default: "")
+
+```sh
+# Export Windows executable
+... | CMD_PATH="/cmd/example" sh
+```
+
 ## Examples
 
 Install the latest version:
@@ -72,11 +79,28 @@ Use alternative sources:
 curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/golang.org/x/tools/godoc | sh
 ```
 
+Specify nested packages
+
+> Note: nested package expect the path to be a `package main` file with a `main`
+> call. If you use something like `spf13/cobra` then check the 2nd example.
+
+```command
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/vito/bass/cmd/bass | sh
+```
+
+```command
+curl -sf {{.Data.env.GOBLIN_ORIGIN_URL}}/gnorm.org/gnorm | CMD_PATH="/cli" PREFIX=./bin sh
+```
+
 ## How does it work?
 
-Each request resolves the needed tags and versions from [proxy.golang.org](https://proxy.golang.org). If no module is found, you can try replacing the version with a commit hash on supported platforms, e.g. GitHub.
+Each request resolves the needed tags and versions from
+[proxy.golang.org](https://proxy.golang.org). If no module is found, you can try
+replacing the version with a commit hash on supported platforms, e.g. GitHub.
 
-The response of this request is a Golang binary compiled for the requested operating system, architecture, package version, and the binary's name—using Go 1.17.x via the official [Docker image](https://hub.docker.com/_/golang).
+The response of this request is a Golang binary compiled for the requested
+operating system, architecture, package version, and the binary's name—using Go
+1.17.x via the official [Docker image](https://hub.docker.com/_/golang).
 
 **Example response**
 
