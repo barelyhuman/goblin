@@ -167,6 +167,7 @@ start() {
   prefix=${PREFIX:-"/usr/local/bin"}
   out=${OUT:-"$bin"}
   tmp="$(mktmpdir)/$out"
+  cmd=${CMD_PATH:-""}
 
   echo
   log_info "Downloading $pkg@$original_version"
@@ -174,7 +175,7 @@ start() {
     log_info "Resolved version $original_version to $version"
   fi
   log_info "Building binary for $os $arch ... Please wait"
-  http_download $tmp "$api/binary/$pkg?os=$os&arch=$arch&version=$version&out=$out"
+  http_download $tmp "$api/binary/$pkg?os=$os&arch=$arch&version=$version&out=$out&cmd=$cmd"
 
   # check if the directory exists and also check if it requires write permissions
   if [ ! -d  "$prefix" ]; then 

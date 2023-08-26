@@ -1,9 +1,9 @@
 package build
 
 import (
+	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -15,6 +15,7 @@ import (
 type Binary struct {
 	Container string
 	Name      string
+	CmdPath   string
 	Source    string
 	Dest      string
 	OS        string
@@ -71,12 +72,12 @@ func (bin *Binary) WriteBuild(writer io.Writer) error {
 		return err
 	}
 
-	err = bin.createTempMainFile(dir)
+	err = bin.addAsDep(dir)
 	if err != nil {
 		return err
 	}
 
-	err = bin.addAsDep(dir)
+	err = bin.createTempMainFile(dir)
 	if err != nil {
 		return err
 	}
@@ -86,14 +87,23 @@ func (bin *Binary) WriteBuild(writer io.Writer) error {
 		return err
 	}
 
-	err = bin.quickBuildBinary(dir)
+	err = bin.createTempMainFile(dir)
 	if err != nil {
-		log.Println("Failed to quick build, attempting manual build")
-		err = bin.buildBinary(dir)
+		return err
+	}
+
+	err = nil
+	if !bin.isUsingCobra(dir) {
+		err = bin.quickBuildBinary(dir)
 		if err != nil {
-			log.Println("Failed to manual build as fell")
-			return err
+			log.Println("Failed to quick build, attempting manual build")
 		}
+	}
+
+	err = bin.buildBinary(dir)
+	if err != nil {
+		log.Println("Failed to manual build as fell")
+		return err
 	}
 
 	f, err := os.Open(bin.Dest)
@@ -146,10 +156,22 @@ func (bin *Binary) newModule(dir string) error {
 
 func (bin *Binary) createTempMainFile(dir string) error {
 	var fileDetails strings.Builder
+
+	isCobraBuilt := bin.isUsingCobra(dir)
+
 	fileDetails.Write([]byte("package main\n"))
-	fileDetails.Write([]byte("import(\""))
-	fileDetails.Write([]byte(bin.Path))
+	if isCobraBuilt {
+		fileDetails.Write([]byte("import( cli \""))
+	} else {
+		fileDetails.Write([]byte("import(\""))
+	}
+	fileDetails.Write([]byte(bin.Path + bin.CmdPath))
 	fileDetails.Write([]byte("\")"))
+
+	if isCobraBuilt {
+		fileDetails.Write([]byte("\nfunc main(){ cli.Run()}"))
+	}
+
 	filePath := path.Join(dir, "main.go")
 	file, err := os.Create(filePath)
 	if err != nil {
@@ -168,6 +190,20 @@ func (bin *Binary) runModTidy(dir string) error {
 	return command(cmd)
 }
 
+func (bin *Binary) isUsingCobra(dir string) bool {
+	modFile, err := os.ReadFile(filepath.Join(dir, "go.mod"))
+
+	if err != nil {
+		return false
+	}
+
+	if !bytes.Contains(modFile, []byte("github.com/spf13/cobra")) {
+		return false
+	}
+
+	return true
+}
+
 func (bin *Binary) quickBuildBinary(dir string) error {
 	dst, err := tempFilename()
 
@@ -176,7 +212,7 @@ func (bin *Binary) quickBuildBinary(dir string) error {
 	}
 
 	bin.Dest = dst
-	cmd := exec.Command("go", "build", "-o", bin.Dest, bin.Module)
+	cmd := exec.Command("go", "build", "-o", bin.Dest, bin.Module+bin.CmdPath)
 	cmd.Env = environ()
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=0")
 	cmd.Env = append(cmd.Env, "GOOS="+bin.OS)
@@ -214,17 +250,16 @@ func (bin *Binary) Cleanup() error {
 
 // tempFilename returns a new temporary file name.
 func tempFilename() (string, error) {
-	f, err := ioutil.TempFile(os.TempDir(), "goblin")
+	f, err := os.MkdirTemp(os.TempDir(), "goblin")
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
-	defer os.Remove(f.Name())
-	return f.Name(), nil
+	defer os.Remove(f)
+	return f, nil
 }
 
 func tempDirectory() (string, error) {
-	dir, err := ioutil.TempDir(os.TempDir(), "goblin")
+	dir, err := os.MkdirTemp(os.TempDir(), "goblin")
 	if err != nil {
 		return "", err
 	}

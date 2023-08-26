@@ -118,6 +118,8 @@ func parsePackage(path string) (pkg, mod, version, bin string) {
 	modp := strings.Split(pkg, "/")
 	if len(modp) >= 3 {
 		mod = strings.Join(modp[:3], "/")
+	} else {
+		mod = pkg
 	}
 
 	// version after @
@@ -214,10 +216,13 @@ func fetchBinary(rw http.ResponseWriter, req *http.Request) {
 		binName = name
 	}
 
+	cmdPath := req.URL.Query().Get("cmd")
+
 	bin := &build.Binary{
 		Path:    pkg,
 		Version: version,
 		OS:      goos,
+		CmdPath: cmdPath,
 		Arch:    arch,
 		Name:    binName,
 		Module:  mod,
