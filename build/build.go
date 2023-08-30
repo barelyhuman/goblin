@@ -10,6 +10,9 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/Masterminds/semver"
+	"github.com/barelyhuman/goblin/resolver"
 )
 
 type Binary struct {
@@ -147,6 +150,15 @@ func (bin *Binary) addAsDep(dir string) error {
 func normalizeModuleDep(bin *Binary) string {
 	mod := bin.Module
 	version := bin.Version
+
+	if resolver.IsSemver(version) {
+		parsedVersion := semver.MustParse(version)
+		if semver.MustParse(version).GreaterThan(semver.MustParse("v2")) {
+			mod += "/v" + fmt.Sprint(parsedVersion.Major())
+		}
+		version = "v" + parsedVersion.String()
+	}
+
 	dep := fmt.Sprintf("%s@%s", mod, version)
 	return dep
 }

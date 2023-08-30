@@ -102,7 +102,7 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		// In case the value from the fallback (github's tag version )
 		// is greater than the version from proxy (proxy.golang) then
 		// pick the version from the fallback
-		if isSemver(fallbackVersion.Version.String()) && isSemver(proxyVersion.Version) &&
+		if IsSemver(fallbackVersion.Version.String()) && IsSemver(proxyVersion.Version) &&
 			semver.MustParse(fallbackVersion.Version.String()).GreaterThan(semver.MustParse(proxyVersion.Version)) {
 			return fallbackVersion.Hash, nil
 		}
@@ -182,7 +182,7 @@ func (v *Resolver) ParseVersion(version string) error {
 	}
 
 	// return the string back if it's a valid hash string
-	if !isSemver(version) && !isValidSemverConstraint(version) {
+	if !IsSemver(version) && !isValidSemverConstraint(version) {
 		matched, err := regexp.MatchString(hashRegex, version)
 		if matched {
 			v.Hash = true
@@ -194,7 +194,7 @@ func (v *Resolver) ParseVersion(version string) error {
 		}
 	}
 
-	if isSemver(version) {
+	if IsSemver(version) {
 		check, err := semver.NewConstraint("= " + version)
 		if err != nil {
 			return err
@@ -267,7 +267,7 @@ func (v *Resolver) ResolveClosestVersion() (string, error) {
 
 // check if the given string is valid semver string and if yest
 // create a constraint checker out of it
-func isSemver(version string) bool {
+func IsSemver(version string) bool {
 	_, err := semver.NewVersion(version)
 	return err == nil
 }
