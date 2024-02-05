@@ -3,6 +3,7 @@ name: Docker Pub
 on: workflow_dispatch
 
 jobs:
+  build:
     name: Buid and push Docker image to GitHub Container registry
     runs-on: ubuntu-latest
     permissions:
