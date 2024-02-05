@@ -4,8 +4,8 @@ WORKDIR /app
 COPY go.* ./
 RUN go mod download
 
-ENV GOBLIN_ORIGIN_URL=""
-ENV ORIGIN_URL=""
+ENV GOBLIN_ORIGIN_URL="http://goblin.run"
+ENV ORIGIN_URL="http://goblin.run"
 
 COPY . ./
 RUN cd www \
