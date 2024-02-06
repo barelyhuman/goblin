@@ -2,3 +2,7 @@ lab
 .env
 *.patch
 .DS_Store
+
+node_modules
+
+www/assets/*.production.css

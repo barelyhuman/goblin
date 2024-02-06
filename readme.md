@@ -1,4 +1,4 @@
-# goblin
+****# goblin
 
 > [gobinaries](https://gobinaries.com/) alternative
 
@@ -62,7 +62,7 @@ The repository builds a nightly image that you can use directly if you don't wis
 ```sh
 $ docker run -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
 # change the domain to whatever you are using for it
-$ docker run -e "GOBLIN_ORIGIN_URL=example.com" -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
+$ docker run -e "ORIGIN_URL=example.com" -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
 ```
 
 ### From Source
@@ -132,13 +132,6 @@ You'll have to create 2 `.env` files, one inside `www` and one at the root
 GITHUB_TOKEN=
 #  the url that you want the server to use for creating scripts
 ORIGIN_URL=
-```
-
-```sh
-# www/.env
-
-# the same url as ORIGIN_URL but added again because vite needs it in the repo
-VITE_GOBLIN_ORIGIN_URL=
 ```
 
 running the `build.sh` should handle building with the needed env files and

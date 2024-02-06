@@ -2,16 +2,11 @@
 
 set -euxo pipefail
 
-# build the web project 
-cd www 
+
 # if using darwin arm64, uncomment the next line
 # make install
-make installLinux
-make build
-cd ..
-
-rm -rf ./static
-ln -sf ./www/dist ./static
+npm i
+npm run build
 
 # build the go server 
 go build -o ./goblin-api ./cmd/goblin-api 

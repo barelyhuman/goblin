@@ -1,0 +1,10 @@
+{
+  "name": "goblin",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "scripts": {
+    "dev": "tailwind -i ./www/assets/main.css -o ./www/assets/main.production.css --watch",
+    "build": "tailwind -i ./www/assets/main.css -o ./www/assets/main.production.css"
+  }
+}
