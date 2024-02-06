@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
@@ -15,10 +16,17 @@ import (
 	"github.com/barelyhuman/goblin/build"
 	"github.com/barelyhuman/goblin/resolver"
 	"github.com/joho/godotenv"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 var shTemplates *template.Template
 var serverURL string
+
+var webTemplates *template.Template
+var webContent template.HTML
 
 // FIXME: Disabled storage and caching for initial version
 // var storageClient *storage.Storage
@@ -27,12 +35,14 @@ func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
 
 	if path == "/" {
-		path = "./static/index.html"
-		http.ServeFile(rw, req, path)
+		webTemplates.ExecuteTemplate(rw, "HomePage", map[string]interface{}{
+			"Content":    webContent,
+			"ORIGIN_URL": serverURL,
+		})
 		return
 	}
 
-	file := filepath.Join("static", path)
+	file := filepath.Join("www/assets", path)
 	info, err := os.Stat(file)
 	if err == nil && info.Mode().IsRegular() {
 		http.ServeFile(rw, req, file)
@@ -87,8 +97,35 @@ func main() {
 		}
 	}
 
+	webTemplates = template.Must(template.ParseGlob("www/pages/*"))
 	shTemplates = template.Must(template.ParseGlob("templates/*"))
 	serverURL = envDefault("ORIGIN_URL", "http://localhost:3000")
+
+	fileData, _ := os.ReadFile("./www/pages/index.md")
+
+	md := goldmark.New(
+		goldmark.WithExtensions(extension.GFM),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(
+			html.WithXHTML(),
+			html.WithUnsafe(),
+		),
+	)
+	var buf bytes.Buffer
+	if err := md.Convert(fileData, &buf); err != nil {
+		panic(err)
+	}
+	templ, _ := template.New("s").Parse(buf.String())
+	buf.Reset()
+	templ.ExecuteTemplate(&buf, "s", struct {
+		ORIGIN_URL string
+	}{
+		ORIGIN_URL: serverURL,
+	})
+
+	webContent = template.HTML(buf.String())
 
 	// FIXME: Disabled storage and caching for initial version
 	// storageClient = &storage.Storage{}
