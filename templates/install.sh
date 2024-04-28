@@ -193,7 +193,7 @@ start() {
     install "$tmp" "$prefix"
   else
     log_info "Permissions required for installation to $prefix — alternatively specify a new directory with:"
-    log_info "  $ curl -sf https://goblin.reaper.im/$pkg@$version | PREFIX=. sh"
+    log_info "  $ curl -sf https://goblin.run/$pkg@$version | PREFIX=. sh"
     sudo install "$tmp" "$prefix"
   fi
 
@@ -202,3 +202,4 @@ start() {
 }
 
 start
+
