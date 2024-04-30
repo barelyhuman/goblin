@@ -4,6 +4,8 @@ go 1.19
 
 require (
 	github.com/Masterminds/semver v1.5.0
+	github.com/aws/aws-sdk-go v1.51.31
+	github.com/barelyhuman/go v0.2.2
 	github.com/google/go-github/v53 v53.2.0
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go/v7 v7.0.66
@@ -18,6 +20,7 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.5 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
