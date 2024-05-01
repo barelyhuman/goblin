@@ -1,63 +1,87 @@
 package storage
 
 import (
-	"context"
+	"bytes"
 	"fmt"
+	"log"
 	"net/url"
-	"os"
 	"time"
 
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/barelyhuman/go/env"
+	"github.com/minio/minio-go"
 )
 
-type MinioStorage struct {
-	Client     *minio.Client
-	BucketName string
+type S3Storage struct {
+	client *minio.Client
+	bucket string
 }
 
-func (s *MinioStorage) Connect() error {
-	endpoint := os.Getenv("MINIO_URL")
-	useSSL := false
+func NewAWSStorage(bucket string) *S3Storage {
+	clientId := env.Get("STORAGE_CLIENT_ID", "")
+	clientSecret := env.Get("STORAGE_CLIENT_SECRET", "")
+	endpoint := env.Get("STORAGE_ENDPOINT", "")
+	ssl := true
 
-	client, err := minio.New(endpoint, &minio.Options{
-		Creds: credentials.NewStaticV4(
-			os.Getenv("MINIO_ROOT_USER"),
-			os.Getenv("MINIO_ROOT_PASSWORD"),
-			""),
-		Secure: useSSL,
-	})
+	// Initiate a client using DigitalOcean Spaces.
+	client, err := minio.New(endpoint, clientId, clientSecret, ssl)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
-	s.Client = client
+	bucketExists, _ := client.BucketExists(bucket)
+
+	if !bucketExists {
+		err := client.MakeBucket(
+			bucket,
+			"blr1",
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	// List all Spaces.
+	spaces, err := client.ListBuckets()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, space := range spaces {
+		fmt.Println(space.Name)
+	}
+
+	return &S3Storage{
+		client: client,
+		bucket: bucket,
+	}
+}
+
+func (a *S3Storage) Connect() error {
 	return nil
 }
 
-func (s *MinioStorage) Upload(objectName string, filePath string) error {
-
-	ctx := context.Background()
-	bucketName := s.BucketName
-
-	info, err := s.Client.FPutObject(ctx, bucketName, objectName, filePath, minio.PutObjectOptions{})
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(info)
-	return nil
+func (a *S3Storage) Upload(objectName string, data bytes.Buffer) error {
+	dataBytes := bytes.NewReader(data.Bytes())
+	_, err := a.client.PutObject(
+		a.bucket,
+		objectName,
+		dataBytes,
+		dataBytes.Size(),
+		minio.PutObjectOptions{},
+	)
+	return err
 }
 
-func (s *MinioStorage) GetSignedURL(objectName string, alias string) (string, error) {
-	reqParams := make(url.Values)
-	reqParams.Set("response-content-disposition", "attachment; filename=\""+alias+"\"")
-	presignedURL, err := s.Client.PresignedGetObject(context.Background(), s.BucketName, objectName, time.Minute*5, reqParams)
+func (a *S3Storage) HasObject(objectName string) bool {
+	obj, err := a.client.StatObject(a.bucket, objectName, minio.StatObjectOptions{})
 	if err != nil {
-		return "", err
+		return false
 	}
+	return len(obj.Key) > 0
+}
 
-	url := os.Getenv("MINIO_URL_PREFIX") + presignedURL.RequestURI()
-
-	return url, nil
+func (a *S3Storage) GetSignedURL(objectName string) (string, error) {
+	url, err := a.client.PresignedGetObject(
+		a.bucket, objectName, time.Minute*15, url.Values{},
+	)
+	return url.String(), err
 }

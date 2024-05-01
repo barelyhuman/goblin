@@ -16,6 +16,25 @@ services:
       - "3000:3000"
     volumes:
       - "./:/usr/src/app"
+    profiles: [app]
+
+  minio:
+    image: "minio/minio:RELEASE.2024-05-01T01-11-10Z"
+    container_name: goblin_minio
+    command: 'server --console-address ":9001" /home/files'
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    env_file:
+      - .env
+    expose:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - "goblin:/data"
+    profiles: [storage]
 
   nginx:
     container_name: goblin_nginx
@@ -28,3 +47,7 @@ services:
       - "9000:9000"
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+    profiles: [app]
+
+volumes:
+  goblin:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
@@ -12,16 +13,16 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/barelyhuman/go/env"
 	"github.com/barelyhuman/goblin/build"
 	"github.com/barelyhuman/goblin/resolver"
+	"github.com/barelyhuman/goblin/storage"
 	"github.com/joho/godotenv"
 )
 
 var shTemplates *template.Template
 var serverURL string
-
-// FIXME: Disabled storage and caching for initial version
-// var storageClient *storage.Storage
+var storageClient storage.Storage
 
 func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
@@ -40,6 +41,7 @@ func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	if strings.HasPrefix(path, "/binary") {
+		log.Print("handle binary")
 		fetchBinary(rw, req)
 		return
 	}
@@ -63,20 +65,12 @@ func StartServer(port string) {
 	}
 }
 
-func envDefault(key string, def string) string {
-	if s := os.Getenv(key); len(strings.TrimSpace(s)) == 0 {
-		return def
-	} else {
-		return s
-	}
-}
-
 // TODO: cleanup code
 // TODO: move everything into their own interface/structs
 func main() {
 
 	envFile := flag.String("env", ".env", "path to read the env config from")
-	portFlag := envDefault("PORT", "3000")
+	portFlag := env.Get("PORT", "3000")
 
 	flag.Parse()
 
@@ -88,17 +82,26 @@ func main() {
 	}
 
 	shTemplates = template.Must(template.ParseGlob("templates/*"))
-	serverURL = envDefault("ORIGIN_URL", "http://localhost:3000")
+	serverURL = env.Get("ORIGIN_URL", "http://localhost:"+portFlag)
 
-	// FIXME: Disabled storage and caching for initial version
-	// storageClient = &storage.Storage{}
-	// storageClient.BucketName = os.Getenv("BUCKET_NAME")
-	// err := storageClient.Connect()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	if isStorageEnabled() {
+		storageClient = storage.NewAWSStorage(env.Get("STORAGE_BUCKET", "goblin-cache"))
+		err := storageClient.Connect()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	StartServer(portFlag)
+}
+
+func isStorageEnabled() bool {
+	useStorageEnv := env.Get("STORAGE_ENABLED", "false")
+	useStorage := false
+	if useStorageEnv == "true" {
+		useStorage = true
+	}
+	return useStorage
 }
 
 func normalizePackage(pkg string) string {
@@ -228,16 +231,19 @@ func fetchBinary(rw http.ResponseWriter, req *http.Request) {
 		Module:  mod,
 	}
 
-	// TODO: check the storage for existing binary for the module
-	// and return from the storage instead
-
 	immutable(rw)
 
-	// FIXME: Disabled storage and caching for initial version
-	// var buf bytes.Buffer
-	// err := bin.WriteBuild(io.MultiWriter(rw, &buf))
+	artifactName := constructArtifactName(bin)
 
-	err := bin.WriteBuild(io.MultiWriter(rw))
+	if isStorageEnabled() && storageClient.HasObject(artifactName) {
+		url, _ := storageClient.GetSignedURL(artifactName)
+		log.Println("From cache")
+		http.Redirect(rw, req, url, http.StatusSeeOther)
+		return
+	}
+
+	var buf bytes.Buffer
+	err := bin.WriteBuild(io.MultiWriter(rw, &buf))
 
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -245,21 +251,29 @@ func fetchBinary(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	if isStorageEnabled() {
+		err = storageClient.Upload(
+			artifactName,
+			buf,
+		)
+
+		if err != nil {
+			log.Println("Failed to upload", err)
+		}
+	}
+
 	err = bin.Cleanup()
 	if err != nil {
 		log.Println("cleaning binary build", err)
 	}
+}
 
-	// FIXME: Disabled storage and caching for initial version
-	// err = storageClient.Upload(bin.Module, bin.Dest)
-	// if err != nil {
-	// 	fmt.Fprint(rw, err.Error())
-	// 	return
-	// }
-
-	// url, err := storageClient.GetSignedURL(bin.Module, bin.Name)
-	// if err != nil {
-	// 	fmt.Fprint(rw, err.Error())
-	// 	return
-	// }
+func constructArtifactName(bin *build.Binary) string {
+	var artifactName strings.Builder
+	artifactName.Write([]byte(bin.Name))
+	artifactName.Write([]byte("-"))
+	artifactName.Write([]byte(bin.OS))
+	artifactName.Write([]byte("-"))
+	artifactName.Write([]byte(bin.Arch))
+	return artifactName.String()
 }
