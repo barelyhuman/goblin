@@ -7,15 +7,12 @@ jobs:
     name: Buid and push Docker image to GitHub Container registry
     runs-on: ubuntu-latest
     permissions:
-      packages: write
       contents: read
+      packages: write
+      attestations: write
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
-
-      - name: Build Meta
-        run: echo "::set-output name=dtag::ghcr.io/barelyhuman/goblin:nightly"
-        id: meta
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -29,8 +26,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build Meta
+        run: echo "::set-output name=dtag::ghcr.io/barelyhuman/goblin:nightly"
+        id: meta
+
       - name: Build and push
         uses: docker/build-push-action@v5
+        id: push
         env:
           REGISTRY: ghcr.io
           OWNER: ${{ github.repository_owner }}
@@ -41,3 +43,10 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.dtag }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ghcr.io/barelyhuman/goblin:nightly
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
