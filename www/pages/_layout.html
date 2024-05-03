@@ -93,7 +93,7 @@
 
 		<nav
 			aria-label="Primary navigation"
-			class="animate-kids fade-in-y mx-auto flex h-header-height max-w-content items-center justify-between px-page-gutter"
+			class="flex justify-between items-center mx-auto animate-kids fade-in-y h-header-height max-w-content px-page-gutter"
 			style="--from: -10px; --delay: 5"
 		>
 			<a href="#" aria-label="Goto top of the page">
@@ -133,7 +133,7 @@
 
 			<a
 				href="https://github.com/barelyhuman/goblin"
-				class="flex items-center gap-1.5 rounded px-1 py-0.5 text-sm font-medium text-subtle transition hover:bg-surface hover:text-text"
+				class="flex gap-1.5 items-center px-1 py-0.5 text-sm font-medium rounded transition text-subtle hover:bg-surface hover:text-text"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -154,13 +154,13 @@
 
 		<main id="content" class="mx-auto max-w-content px-page-gutter">
 			<section
-				class="animate-kids fade-in-y flex min-h-content flex-col justify-center space-y-6 sm:space-y-10"
+				class="flex flex-col justify-center space-y-6 animate-kids fade-in-y min-h-content sm:space-y-10"
 				style="--from: 20px"
 			>
 				<h1 class="text-4xl font-bold tracking-tight sm:text-6xl">
 					Golang binaries in a curl, built by
 					<span
-						class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+						class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
 						>goblins</span
 					>
 				</h1>
@@ -171,14 +171,14 @@
 
 				<div style="--delay: 1" class="relative">
 					<pre><code class="language-command">curl -sf http://goblin.run/github.com/rakyll/hey | sh</code></pre>
-					<div class="absolute inset-y-0 right-3 flex items-center">
+					<div class="flex absolute inset-y-0 right-3 items-center">
 						<button
 							@click="() => {
 								$data.copied = true
 								setTimeout(() => { $data.copied = false }, 1500)
 								$clipboard('curl -sf http://goblin.run/github.com/rakyll/hey | sh')
 							}"
-							class="flex h-7 w-7 cursor-copy items-center justify-center rounded bg-base text-subtle shadow transition-all hover:text-text hover:shadow-md"
+							class="flex justify-center items-center w-7 h-7 rounded shadow transition-all cursor-copy bg-base text-subtle hover:text-text hover:shadow-md"
 						>
 							<template x-if="$data.copied">
 								<svg
@@ -226,7 +226,7 @@
 				<div style="--delay: 2">
 					<a
 						href="#introduction"
-						class="inline-flex rounded-md bg-gradient-to-br from-primary to-secondary px-6 py-3 text-sm font-semibold text-surface transition-shadow hover:shadow"
+						class="inline-flex px-6 py-3 text-sm font-semibold bg-gradient-to-br rounded-md transition-shadow from-primary to-secondary text-surface hover:shadow"
 						>Get Started</a
 					>
 				</div>
@@ -234,7 +234,7 @@
 
 			<article id="introduction">
 				<p
-					class="rounded-md border border-primary bg-primary/10 p-3 text-sm font-medium text-primary sm:p-6"
+					class="p-3 text-sm font-medium rounded-md border border-primary bg-primary/10 text-primary sm:p-6"
 				>
 					If you get value from using Goblin, please consider
 					<a href="https://github.com/sponsors/barelyhuman" class="link"
@@ -247,15 +247,15 @@
 		</main>
 
 		<footer class="mx-auto mt-page-top max-w-content px-page-gutter">
-			<div class="flex items-center justify-between border-t py-6 gap-3">
+			<div class="flex gap-3 justify-between items-center py-6 border-t">
 				<a
 					href="https://github.com/barelyhuman/goblin"
-					class="text-sm text-subtle transition hover:text-text"
+					class="text-sm transition text-subtle hover:text-text"
 					>View source on GitHub</a
 				>
 
 				<p
-					class="cursor-default rounded border border-primary bg-primary/10 px-1.5 py-0.5 font-mono text-sm text-primary"
+					class="px-1.5 py-0.5 font-mono text-sm rounded border cursor-default border-primary bg-primary/10 text-primary"
 				>
 					<span x-text="hits">0</span>&nbsp;hits
 				</p>
