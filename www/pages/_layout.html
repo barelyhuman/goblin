@@ -81,10 +81,10 @@
 		hits: 0,
 		async init() {
 			const registerHit = await fetch(
-				`https://hits.goblin.run/hit?url=${window.location.href}`
+				`https://hits.barelyhuman.xyz/hit?url=${window.location.href}`
 			);
 			const hitsCount =
-				await fetch(`https://hits.goblin.run/hits?url=${window.location.href}`).then(d=>d.json());
+				await fetch(`https://hits.barelyhuman.xyz/hits?url=${window.location.href}`).then(d=>d.json());
 			this.hits = hitsCount.count
 		},
 	}"
