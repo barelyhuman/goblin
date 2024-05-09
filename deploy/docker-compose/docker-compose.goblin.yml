@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  goblin:
+    image: ghcr.io/barelyhuman/goblin:nightly
+    platform: "linux/amd64"
+    networks:
+      - caddy_network
+    ports:
+      - 3000:3000
+
+networks:
+  caddy_network:
+    external: true

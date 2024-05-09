@@ -1,0 +1,3 @@
+localhost:80, http://goblin.run, https://goblin.run {
+    reverse_proxy goblin:3000
+}
