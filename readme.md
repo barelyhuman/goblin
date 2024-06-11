@@ -140,17 +140,17 @@ restarting the server for you.
 
 The server can be configured easily using environment variables
 
-| KEY                   | default                    | description                                                                         | options         |
-| --------------------- | -------------------------- | ----------------------------------------------------------------------------------- | --------------- |
-| STORAGE_ENABLED       | `false`                    | Enable persistence                                                                  | `true`          |
-| STORAGE_CLIENT_ID     | <empty>                    | CLIENT_ID of a S3 compatible storage                                                |                 |
-| STORAGE_CLIENT_SECRET | <empty>                    | CLIENT_SECRET of a S3 compatible storage                                            |                 |
-| STORAGE_ENDPOINT      | <empty>                    | Endpoint value of an S3 compatible storage                                          |                 |
-| STORAGE_BUCKET        | <empty>                    | Bucket name of the S3 compatible storage                                            |                 |
-| PORT                  | `3000`                     | Default port for running the application                                            |                 |
-| ORIGIN_URL            | `http://localhost:${PORT}` | Default URL of the application                                                      |                 |
-| GITHUB_TOKEN          | <empty>                    | Github authenticated token for accessing github repositories and resolving versions |                 |
-| CLEAR_CACHE_TIME      | <empty>                    | Duration used to clear and set expiry for stored binaries                           | `1m`,`30s`, etc |
+| KEY                   | default                    | description                                                                          | options         |
+| --------------------- | -------------------------- | ------------------------------------------------------------------------------------ | --------------- |
+| STORAGE_ENABLED       | `false`                    | Enable persistence                                                                   | `true`          |
+| STORAGE_CLIENT_ID     | <empty>                    | CLIENT_ID of a S3 compatible storage                                                 |                 |
+| STORAGE_CLIENT_SECRET | <empty>                    | CLIENT_SECRET of a S3 compatible storage                                             |                 |
+| STORAGE_ENDPOINT      | <empty>                    | Endpoint value of an S3 compatible storage                                           |                 |
+| STORAGE_BUCKET        | <empty>                    | Bucket name of the S3 compatible storage                                             |                 |
+| PORT                  | `3000`                     | Default port for running the application                                             |                 |
+| ORIGIN_URL            | `http://localhost:${PORT}` | Default URL of the application                                                       |                 |
+| GITHUB_TOKEN          | <empty>                    | Github authentication token for accessing github repositories and resolving versions |                 |
+| CLEAR_CACHE_TIME      | <empty>                    | Duration used to clear and set expiry for stored binaries                            | `1m`,`30s`, etc |
 
 ## License
 
