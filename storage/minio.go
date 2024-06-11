@@ -85,3 +85,27 @@ func (a *S3Storage) GetSignedURL(objectName string) (string, error) {
 	)
 	return url.String(), err
 }
+
+func (a *S3Storage) ListObjects() []MicroObject {
+	doneCh := make(chan struct{})
+	defer close(doneCh)
+	recursive := true
+	collection := []MicroObject{}
+	for obj := range a.client.ListObjectsV2(a.bucket, "", recursive, doneCh) {
+		collection = append(collection,
+			MicroObject{
+				LastModified: obj.LastModified,
+				Key:          obj.Key,
+			},
+		)
+	}
+	return collection
+}
+
+func (a *S3Storage) RemoveObject(objectName string) (bool, error) {
+	err := a.client.RemoveObject(a.bucket, objectName)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}

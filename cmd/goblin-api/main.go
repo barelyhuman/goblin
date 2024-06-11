@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/barelyhuman/go/env"
 	"github.com/barelyhuman/goblin/build"
@@ -92,7 +93,43 @@ func main() {
 		}
 	}
 
+	clearStorageBackgroundJob()
 	StartServer(portFlag)
+}
+
+func clearStorageBackgroundJob() {
+	cacheHoldEnv := env.Get("CLEAR_CACHE_TIME", "")
+	if len(cacheHoldEnv) == 0 {
+		return
+	}
+
+	cacheHoldDuration, _ := time.ParseDuration(cacheHoldEnv)
+
+	cleaner := func(storageClient storage.Storage) {
+		log.Println("Cleaning Cached Storage Object")
+		objects := storageClient.ListObjects()
+		for _, obj := range objects {
+			objExpiry := obj.LastModified.Add(cacheHoldDuration)
+			if time.Now().Equal(objExpiry) || time.Now().After(objExpiry) {
+				storageClient.RemoveObject(obj.Key)
+			}
+		}
+	}
+
+	ticker := time.NewTicker(cacheHoldDuration)
+	quit := make(chan struct{})
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				cleaner(storageClient)
+			case <-quit:
+				ticker.Stop()
+				return
+			}
+		}
+	}()
 }
 
 func isStorageEnabled() bool {
