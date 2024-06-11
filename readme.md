@@ -26,6 +26,7 @@ original one)
 - Easy to use - Users don't need go to install your CLI
 - Works with most common package ( Raise an [issue](/issues) if you find it not
   working with something)
+- Persistence ( can be made into a temporary cache to minimize storage costs)
 - Self Hostable
 
 ## Roadmap
@@ -55,23 +56,14 @@ hosted version from me at [goblin.run](https://goblin.run)
 you'll have to make a few tweaks to the original code to make it work in a
 simpler fashion**
 
+### Existing Image
 
-### Existing Image 
-The repository builds a nightly image that you can use directly if you don't wish to tweak anything. 
+The repository builds a nightly image that you can use directly if you don't wish to tweak anything.
 
 ```sh
 $ docker run -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
 # change the domain to whatever you are using for it
 $ docker run -e "GOBLIN_ORIGIN_URL=example.com" -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
-```
-
-### From Source
-Let's start
-
-1. Clone the code
-
-```sh
-git clone https://github.com/barelyhuman/goblin
 ```
 
 #### Using Docker
@@ -143,6 +135,22 @@ VITE_GOBLIN_ORIGIN_URL=
 
 running the `build.sh` should handle building with the needed env files and
 restarting the server for you.
+
+## Configuration
+
+The server can be configured easily using environment variables
+
+| KEY                   | default                    | description                                                                         | options         |
+| --------------------- | -------------------------- | ----------------------------------------------------------------------------------- | --------------- |
+| STORAGE_ENABLED       | `false`                    | Enable persistence                                                                  | `true`          |
+| STORAGE_CLIENT_ID     | <empty>                    | CLIENT_ID of a S3 compatible storage                                                |                 |
+| STORAGE_CLIENT_SECRET | <empty>                    | CLIENT_SECRET of a S3 compatible storage                                            |                 |
+| STORAGE_ENDPOINT      | <empty>                    | Endpoint value of an S3 compatible storage                                          |                 |
+| STORAGE_BUCKET        | <empty>                    | Bucket name of the S3 compatible storage                                            |                 |
+| PORT                  | `3000`                     | Default port for running the application                                            |                 |
+| ORIGIN_URL            | `http://localhost:${PORT}` | Default URL of the application                                                      |                 |
+| GITHUB_TOKEN          | <empty>                    | Github authenticated token for accessing github repositories and resolving versions |                 |
+| CLEAR_CACHE_TIME      | <empty>                    | Duration used to clear and set expiry for stored binaries                           | `1m`,`30s`, etc |
 
 ## License
 
