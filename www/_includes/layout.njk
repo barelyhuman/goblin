@@ -7,6 +7,7 @@
 		<meta name="description" content="Install Go binaries—without Go." />
 		<meta property="og:image" content="/opengraph-image.jpg" />
 		<link rel="stylesheet" href="/style.css" />
+		
 		<title>Goblin</title>
 
 		<script
@@ -93,7 +94,7 @@
 
 		<nav
 			aria-label="Primary navigation"
-			class="flex justify-between items-center mx-auto animate-kids fade-in-y h-header-height max-w-content px-page-gutter"
+			class="flex items-center justify-between mx-auto animate-kids fade-in-y h-header-height max-w-content px-page-gutter"
 			style="--from: -10px; --delay: 5"
 		>
 			<a href="#" aria-label="Goto top of the page">
@@ -170,15 +171,15 @@
 				</p>
 
 				<div style="--delay: 1" class="relative">
-					<pre><code class="language-command">curl -sf http://goblin.run/github.com/rakyll/hey | sh</code></pre>
-					<div class="flex absolute inset-y-0 right-3 items-center">
+					<pre><code class="language-command">curl -sf {{ meta.originUrl }}/github.com/rakyll/hey | sh</code></pre>
+					<div class="absolute inset-y-0 flex items-center right-3">
 						<button
 							@click="() => {
 								$data.copied = true
 								setTimeout(() => { $data.copied = false }, 1500)
 								$clipboard('curl -sf http://goblin.run/github.com/rakyll/hey | sh')
 							}"
-							class="flex justify-center items-center w-7 h-7 rounded shadow transition-all cursor-copy bg-base text-subtle hover:text-text hover:shadow-md"
+							class="flex items-center justify-center transition-all rounded shadow w-7 h-7 cursor-copy bg-base text-subtle hover:text-text hover:shadow-md"
 						>
 							<template x-if="$data.copied">
 								<svg
@@ -226,7 +227,7 @@
 				<div style="--delay: 2">
 					<a
 						href="#introduction"
-						class="inline-flex px-6 py-3 text-sm font-semibold bg-gradient-to-br rounded-md transition-shadow from-primary to-secondary text-surface hover:shadow"
+						class="inline-flex px-6 py-3 text-sm font-semibold transition-shadow rounded-md bg-gradient-to-br from-primary to-secondary text-surface hover:shadow"
 						>Get Started</a
 					>
 				</div>
@@ -234,7 +235,7 @@
 
 			<article id="introduction">
 				<p
-					class="p-3 text-sm font-medium rounded-md border border-primary bg-primary/10 text-primary sm:p-6"
+					class="p-3 text-sm font-medium border rounded-md border-primary bg-primary/10 text-primary sm:p-6"
 				>
 					If you get value from using Goblin, please consider
 					<a href="https://github.com/sponsors/barelyhuman" class="link"
@@ -242,12 +243,12 @@
 					>. This helps cover server costs and supports my open source work.
 				</p>
 
-				{{ .Content }}
+				 {{ content | safe }}
 			</article>
 		</main>
 
 		<footer class="mx-auto mt-page-top max-w-content px-page-gutter">
-			<div class="flex gap-3 justify-between items-center py-6 border-t">
+			<div class="flex items-center justify-between gap-3 py-6 border-t">
 				<a
 					href="https://github.com/barelyhuman/goblin"
 					class="text-sm transition text-subtle hover:text-text"

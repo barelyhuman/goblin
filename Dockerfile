@@ -1,3 +1,13 @@
+FROM node:20-alpine AS site_builder
+WORKDIR /app
+COPY ./www . 
+
+RUN npm i \
+    ; npm run build \
+    ; rm -rf ./static \ 
+    ; ln -sf ./www/_site ./static 
+
+
 FROM golang:1.19
 WORKDIR /app
 
@@ -8,12 +18,8 @@ ENV GOBLIN_ORIGIN_URL="http://goblin.run"
 ENV ORIGIN_URL="http://goblin.run"
 
 COPY . ./
-RUN cd www \
-    ;make installLinux \
-    ;make build \
-    ;cd .. \
-    ;rm -rf ./static \
-    ;ln -sf ./www/dist ./static
+RUN rm -rf ./static ./www
+COPY --from=site_builder /app/_site ./static
 
 RUN go build -o ./goblin-api ./cmd/goblin-api 
 
