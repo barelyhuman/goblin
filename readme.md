@@ -31,7 +31,9 @@ original one)
 
 ## Roadmap
 
-- [ ] Cache a previously built version binary
+- [x] Cache a previously built version binary
+  - Builds are cache for 6 hours due reduce storage costs, since it's run by a
+    solo developer
 - [ ] Add support for download binaries from existing Github Release artifacts
 
 ## Authors
@@ -58,7 +60,8 @@ simpler fashion**
 
 ### Existing Image
 
-The repository builds a nightly image that you can use directly if you don't wish to tweak anything.
+The repository builds a nightly image that you can use directly if you don't
+wish to tweak anything.
 
 ```sh
 $ docker run -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
