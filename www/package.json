@@ -1,0 +1,26 @@
+{
+	"name": "www",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "concurrently 'npm:dev:*'",
+		"dev:css": "tailwindcss -i ./styles/main.css -o ./_site/style.css --watch",
+		"dev:site": "npx @11ty/eleventy --serve",
+		"build:css": "tailwindcss -i ./styles/main.css -o ./_site/style.css",
+		"build:site": "npx @11ty/eleventy",
+		"build": "npm run build:site; npm run build:css"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@11ty/eleventy": "^2.0.1",
+		"tailwind": "^4.0.0",
+		"tailwindcss": "^3.4.10"
+	},
+	"dependencies": {
+		"concurrently": "^8.2.2",
+		"dotenv": "^16.4.5"
+	}
+}
