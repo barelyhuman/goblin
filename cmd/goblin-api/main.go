@@ -309,6 +309,8 @@ func constructArtifactName(bin *build.Binary) string {
 	var artifactName strings.Builder
 	artifactName.Write([]byte(bin.Name))
 	artifactName.Write([]byte("-"))
+	artifactName.Write([]byte(bin.Version))
+	artifactName.Write([]byte("-"))
 	artifactName.Write([]byte(bin.OS))
 	artifactName.Write([]byte("-"))
 	artifactName.Write([]byte(bin.Arch))
