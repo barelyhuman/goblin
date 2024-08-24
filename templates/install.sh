@@ -8,6 +8,10 @@ echoerr() {
   printf "$@\n" 1>&2
 }
 
+log_donation() {
+  printf "\033[32;5;61m$@\033[0;00m\n"
+}
+
 log_info() {
   printf "\033[33;5;61m  >>\033[0;00m $@\n"
 }
@@ -198,6 +202,8 @@ start() {
   fi
 
   log_info "Installation complete"
+  printf "\n"
+  log_donation "Thank you for using goblin, if you like the ease of installation and would like to support the developer, please do so on http://github.com/sponsors/barelyhuman"
   echo
 }
 
