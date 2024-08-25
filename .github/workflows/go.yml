@@ -5,16 +5,16 @@ name: Go
 
 on:
   push:
-    branches: ['dev']
+    branches: ["dev"]
   pull_request:
-    branches: ['dev']
+    branches: ["dev"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ['1.19.0','1.21.5']
+        version: ["1.19.0", "1.21.5", "1.22.2"]
     steps:
       - uses: actions/checkout@v3
 
