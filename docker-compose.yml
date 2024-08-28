@@ -1,7 +1,6 @@
 # FIXME:
 # DISABLED STORAGE FOR THE INITIAL VERSION SINCE BUILDING IS LIMITED TO A FEW SECONDS
 
-version: "3.4"
 services:
   api:
     build: "."
