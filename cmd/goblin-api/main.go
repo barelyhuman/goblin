@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -19,11 +20,42 @@ import (
 	"github.com/barelyhuman/goblin/resolver"
 	"github.com/barelyhuman/goblin/storage"
 	"github.com/joho/godotenv"
+	"go.uber.org/ratelimit"
 )
 
 var shTemplates *template.Template
 var serverURL string
 var storageClient storage.Storage
+var rateLimiter ratelimit.Limiter
+
+type ErrorJSON struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+func (ej ErrorJSON) toJSONString() (string, error) {
+	marshaled, err := json.Marshal(ej)
+	if err != nil {
+		return "", err
+	}
+	return string(marshaled), nil
+}
+
+type VersionJSON struct {
+	Success         bool   `json:"success"`
+	Package         string `json:"package"`
+	Binary          string `json:"binary"`
+	OriginalVersion string `json:"originalVersion"`
+	Version         string `json:"version"`
+}
+
+func (ej VersionJSON) toJSONString() (string, error) {
+	marshaled, err := json.Marshal(ej)
+	if err != nil {
+		return "", err
+	}
+	return string(marshaled), nil
+}
 
 func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path
@@ -38,6 +70,13 @@ func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 	info, err := os.Stat(file)
 	if err == nil && info.Mode().IsRegular() {
 		http.ServeFile(rw, req, file)
+		return
+	}
+
+	if strings.HasPrefix(path, "/version") {
+		log.Println("Resolving version")
+		rateLimiter.Take()
+		resolveVersionJSON(rw, req)
 		return
 	}
 
@@ -74,6 +113,9 @@ func main() {
 	portFlag := env.Get("PORT", "3000")
 
 	flag.Parse()
+
+	// starting off with 250 since there's only one operation that's being rate limited
+	rateLimiter = ratelimit.New(250)
 
 	if _, err := os.Stat(*envFile); !errors.Is(err, os.ErrNotExist) {
 		err := godotenv.Load()
@@ -223,6 +265,36 @@ func fetchInstallScript(rw http.ResponseWriter, req *http.Request) {
 		OriginalVersion: version,
 		Version:         resolvedVersion,
 	})
+}
+
+func resolveVersionJSON(rw http.ResponseWriter, req *http.Request) {
+	// only reply in JSON
+	rw.Header().Set("Content-Type", "application/json")
+
+	pkg := strings.TrimPrefix(req.URL.Path, "/version")
+	pkg, _, version, name := parsePackage(pkg)
+	v := &resolver.Resolver{
+		Pkg: pkg,
+	}
+	v.ParseVersion(version)
+	resolvedVersion, err := v.ResolveVersion()
+	if err != nil || len(resolvedVersion) == 0 {
+		errorJson, _ := ErrorJSON{Success: false, Message: "Failed to resolve version:" + version}.toJSONString()
+		rw.Write([]byte(errorJson))
+		return
+	}
+
+	responseJson, _ := VersionJSON{
+		Success:         true,
+		Package:         pkg,
+		Binary:          name,
+		OriginalVersion: version,
+		Version:         resolvedVersion,
+	}.toJSONString()
+
+	rw.Write([]byte(responseJson))
+	return
+
 }
 
 func fetchBinary(rw http.ResponseWriter, req *http.Request) {
