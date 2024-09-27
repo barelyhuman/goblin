@@ -20,11 +20,13 @@ import (
 	"github.com/barelyhuman/goblin/resolver"
 	"github.com/barelyhuman/goblin/storage"
 	"github.com/joho/godotenv"
+	"go.uber.org/ratelimit"
 )
 
 var shTemplates *template.Template
 var serverURL string
 var storageClient storage.Storage
+var rateLimiter ratelimit.Limiter
 
 type ErrorJSON struct {
 	Success bool   `json:"success"`
@@ -73,6 +75,7 @@ func HandleRequest(rw http.ResponseWriter, req *http.Request) {
 
 	if strings.HasPrefix(path, "/version") {
 		log.Println("Resolving version")
+		rateLimiter.Take()
 		resolveVersionJSON(rw, req)
 		return
 	}
@@ -110,6 +113,9 @@ func main() {
 	portFlag := env.Get("PORT", "3000")
 
 	flag.Parse()
+
+	// starting off with 250 since there's only one operation that's being rate limited
+	rateLimiter = ratelimit.New(250)
 
 	if _, err := os.Stat(*envFile); !errors.Is(err, os.ErrNotExist) {
 		err := godotenv.Load()

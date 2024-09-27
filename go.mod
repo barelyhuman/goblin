@@ -9,11 +9,13 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/tj/go-semver v1.0.0
+	go.uber.org/ratelimit v0.3.1
 	golang.org/x/oauth2 v0.16.0
 )
 
 require (
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect
+	github.com/benbjohnson/clock v1.3.0 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
