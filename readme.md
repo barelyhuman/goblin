@@ -13,6 +13,20 @@ people are still waiting for gobinaries to update itself.
 **All credits to [tj](https://github.com/tj) for the idea and the initial
 implementation.**
 
+- [goblin](#goblin)
+  - [Why not fork?](#why-not-fork)
+  - [Highlights](#highlights)
+  - [Roadmap](#roadmap)
+  - [Authors](#authors)
+  - [Usage](#usage)
+  - [Exposed API](#exposed-api)
+  - [Deploy your own](#deploy-your-own)
+    - [Existing Image](#existing-image)
+      - [Using Docker](#using-docker)
+      - [Using Traditional Servers](#using-traditional-servers)
+  - [Configuration](#configuration)
+  - [License](#license)
+
 ## Why not fork?
 
 To keep it short, it's fun to build the arch from scratch, helps you learn. Also
@@ -43,6 +57,15 @@ original one)
 ## Usage
 
 You can read about it on [https://goblin.run](https://goblin.run)
+
+## Exposed API
+
+<small> from v0.4.0 </small>
+The server exposes a the following public routes usable for information
+
+**`GET /version/<path>/<to>/<pkg>`**
+
+- A `GET /version` request on a package path for example `github.com/barelyhuman/commitlog/v3` would give you the latest version resolved for it by comparing it on the goproxy and github's repo tags. This is the same algo used internally by Goblin and is available to you.
 
 ## Deploy your own
 
