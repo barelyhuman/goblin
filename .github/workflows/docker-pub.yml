@@ -61,7 +61,7 @@ jobs:
           push: true
           tags: ${{ env.DEVELOPMENT_TAG }},nightly
           
-      - name: Build and push nightly
+      - name: Build and push release tag
         if: github.ref_type == 'tag'
         uses: docker/build-push-action@v5
         id: pushRelease
@@ -83,7 +83,7 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
       
-      - name: Generate artifact attestation
+      - name: Generate release artifact attestation
         if: github.ref_type == 'tag'
         uses: actions/attest-build-provenance@v1
         with:
