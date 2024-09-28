@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
+  push: 
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -36,10 +39,15 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
 
       - name: Build Meta
-        run: echo "::set-output name=dtag::ghcr.io/barelyhuman/goblin:nightly-${{ steps.date.outputs.date }}"
-        id: meta
+        run: |
+          echo "::set-output name=dtag::ghcr.io/barelyhuman/goblin:nightly-${{ steps.date.outputs.date }}"
 
-      - name: Build and push
+      - name: Build Release Meta 
+        run: | 
+          echo "::set-output name=rtag::ghcr.io/barelyhuman/goblin:${{ github.ref_name }}"
+        if: github.ref_type == 'tag'
+
+      - name: Build and push nightly
         uses: docker/build-push-action@v5
         id: push
         env:
@@ -52,7 +60,22 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.dtag }}
-
+          
+      - name: Build and push nightly
+        if: github.ref_type == 'tag'
+        uses: docker/build-push-action@v5
+        id: push
+        env:
+          REGISTRY: ghcr.io
+          OWNER: ${{ github.repository_owner }}
+          IMAGE_NAME: ${{ github.repository }}
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.rtag }}
+          
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
