@@ -59,7 +59,7 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.DEVELOPMENT_TAG }}
+          tags: ${{ env.DEVELOPMENT_TAG }},nightly
           
       - name: Build and push nightly
         if: github.ref_type == 'tag'
