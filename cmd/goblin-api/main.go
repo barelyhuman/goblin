@@ -140,25 +140,37 @@ func main() {
 }
 
 func clearStorageBackgroundJob() {
+	if !isStorageEnabled() {
+		log.Printf("Clearer Disabled since storage is disabled")
+		return
+	}
+
 	cacheHoldEnv := env.Get("CLEAR_CACHE_TIME", "")
 	if len(cacheHoldEnv) == 0 {
 		return
 	}
 
-	cacheHoldDuration, _ := time.ParseDuration(cacheHoldEnv)
+	cacheHoldDuration, err := time.ParseDuration(cacheHoldEnv)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	log.Printf("Clearer Initialized for: %v\n", cacheHoldDuration)
 
 	cleaner := func(storageClient storage.Storage) {
 		log.Println("Cleaning Cached Storage Object")
 		objects := storageClient.ListObjects()
+		now := time.Now()
 		for _, obj := range objects {
 			objExpiry := obj.LastModified.Add(cacheHoldDuration)
-			if time.Now().Equal(objExpiry) || time.Now().After(objExpiry) {
+			if now.Equal(objExpiry) || now.After(objExpiry) {
 				storageClient.RemoveObject(obj.Key)
 			}
 		}
 	}
 
-	ticker := time.NewTicker(cacheHoldDuration)
+	tickerDur, _ := time.ParseDuration("1m")
+	ticker := time.NewTicker(tickerDur)
 	quit := make(chan struct{})
 
 	go func() {
