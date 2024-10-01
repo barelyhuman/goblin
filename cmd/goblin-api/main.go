@@ -169,7 +169,7 @@ func clearStorageBackgroundJob() {
 		}
 	}
 
-	tickerDur, _ := time.ParseDuration("1m")
+	tickerDur, _ := time.ParseDuration("2m")
 	ticker := time.NewTicker(tickerDur)
 	quit := make(chan struct{})
 
