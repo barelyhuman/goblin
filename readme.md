@@ -173,6 +173,7 @@ The server can be configured easily using environment variables
 | STORAGE_CLIENT_SECRET | <empty>                    | CLIENT_SECRET of a S3 compatible storage                                             |                 |
 | STORAGE_ENDPOINT      | <empty>                    | Endpoint value of an S3 compatible storage                                           |                 |
 | STORAGE_BUCKET        | <empty>                    | Bucket name of the S3 compatible storage                                             |                 |
+| STORAGE_BUCKET_PREFIX | <empty>                    | folder/namespace to store the files inside the bucket                                |                 |
 | PORT                  | `3000`                     | Default port for running the application                                             |                 |
 | ORIGIN_URL            | `http://localhost:${PORT}` | Default URL of the application                                                       |                 |
 | GITHUB_TOKEN          | <empty>                    | Github authentication token for accessing github repositories and resolving versions |                 |
