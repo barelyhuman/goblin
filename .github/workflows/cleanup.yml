@@ -1,0 +1,25 @@
+name: Cleaner
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 0 * * *"
+  pull_request:
+    branches:
+      - "dev"
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: goblin
+          package-type: container
+          min-versions-to-keep: 10          
+          ignore-versions: '(v?\d+\.\d+\.\d+|latest|(nightly[-]\w+))'
