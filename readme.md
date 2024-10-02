@@ -83,13 +83,12 @@ simpler fashion**
 
 ### Existing Image
 
-The repository builds a nightly image that you can use directly if you don't
-wish to tweak anything.
+The repository builds and publishes a `latest` and a semver tagged version on each release. You can use that if you do not wish to tweak or change anything in the original source code and build structure
 
 ```sh
-$ docker run -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
+$ docker run -p "3000:3000" ghcr.io/barelyhuman/goblin:latest
 # change the domain to whatever you are using for it
-$ docker run -e "GOBLIN_ORIGIN_URL=example.com" -p "3000:3000" ghcr.io/barelyhuman/goblin:nightly
+$ docker run -e "GOBLIN_ORIGIN_URL=example.com" -p "3000:3000" ghcr.io/barelyhuman/goblin:latest
 ```
 
 #### Using Docker
@@ -155,8 +154,8 @@ ORIGIN_URL=
 ```sh
 # www/.env
 
-# the same url as ORIGIN_URL but added again because vite needs it in the repo
-VITE_GOBLIN_ORIGIN_URL=
+# the same url as ORIGIN_URL but added again because the static build needs it in the repo
+GOBLIN_ORIGIN_URL=
 ```
 
 running the `build.sh` should handle building with the needed env files and
