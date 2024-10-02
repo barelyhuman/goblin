@@ -48,7 +48,7 @@ jobs:
         if: github.ref_type == 'tag'
 
       - name: Build and push nightly
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         id: push
         env:
           REGISTRY: ghcr.io
@@ -63,7 +63,7 @@ jobs:
           
       - name: Build and push release tag
         if: github.ref_type == 'tag'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         id: pushRelease
         env:
           REGISTRY: ghcr.io
