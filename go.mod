@@ -15,6 +15,11 @@ require (
 	golang.org/x/oauth2 v0.16.0
 )
 
+// Sec patches
+require golang.org/x/crypto v0.31.0 // indirect
+
+require google.golang.org/protobuf v1.33.0 // indirect
+
 require (
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect
 	github.com/benbjohnson/clock v1.3.0 // indirect
@@ -29,11 +34,9 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/rs/xid v1.6.0 // indirect
-	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
