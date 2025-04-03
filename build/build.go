@@ -58,7 +58,7 @@ func environ() (env []string) {
 }
 
 func (bin *Binary) WriteBuild(writer io.Writer) error {
-	dir, err := tempDirectory()
+	dir, err := GetTempDirectory()
 	if err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("creating temporary directory: %w", err)
 	}
@@ -274,7 +274,7 @@ func tempFilename() (string, error) {
 	return f, nil
 }
 
-func tempDirectory() (string, error) {
+func GetTempDirectory() (string, error) {
 	dir, err := os.MkdirTemp(os.TempDir(), "goblin")
 	if err != nil {
 		return "", err

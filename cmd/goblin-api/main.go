@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -135,6 +136,7 @@ func main() {
 		}
 	}
 
+	clearTempCaches()
 	clearStorageBackgroundJob()
 	StartServer(portFlag)
 }
@@ -399,4 +401,51 @@ func constructArtifactName(bin *build.Binary) string {
 	artifactName.Write([]byte("-"))
 	artifactName.Write([]byte(bin.Arch))
 	return artifactName.String()
+}
+
+func CleanupGoCache() {
+	log.Println("Cleaning up go caches")
+	cmd := exec.Command("go", "clean", "-cache")
+	err := cmd.Run()
+	if err != nil {
+		log.Printf("Failed to run go clean -cache with error: %v", err)
+	}
+
+	cmd = exec.Command("go", "clean", "-modcache")
+	err = cmd.Run()
+	if err != nil {
+		log.Printf("Failed to run go clean -modcache with error: %v", err)
+	}
+}
+
+func CleanupFailedBuildCaches() {
+	log.Println("Cleaning up fail build directories")
+	base := os.TempDir()
+	entries, err := os.ReadDir(base)
+	if err != nil {
+		log.Println("failed to read temp directory")
+		return
+	}
+	for _, ent := range entries {
+		if ent.IsDir() {
+			if strings.HasPrefix(ent.Name(), "goblin") {
+				err := os.RemoveAll(ent.Name())
+				if err != nil {
+					log.Printf("failed to remove dir: %v", err)
+				}
+			}
+		}
+	}
+}
+
+func clearTempCaches() {
+	tickerDur, _ := time.ParseDuration("30s")
+	ticker := time.NewTicker(tickerDur)
+
+	go func() {
+		for range ticker.C {
+			CleanupFailedBuildCaches()
+			CleanupGoCache()
+		}
+	}()
 }
