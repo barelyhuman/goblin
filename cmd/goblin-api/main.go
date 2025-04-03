@@ -439,7 +439,7 @@ func CleanupFailedBuildCaches() {
 }
 
 func clearTempCaches() {
-	tickerDur, _ := time.ParseDuration("30s")
+	tickerDur, _ := time.ParseDuration("6h")
 	ticker := time.NewTicker(tickerDur)
 
 	go func() {
