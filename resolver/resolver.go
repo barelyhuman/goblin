@@ -95,8 +95,7 @@ func (v *Resolver) ResolveVersion() (string, error) {
 		}
 
 		if len(proxyVersion.Version) == 0 {
-			fallbackVersion, err := v.GithubFallbackResolveVersion()
-			return fallbackVersion.Hash, err
+			return fallbackVersion.Hash, fallbackErr
 		}
 
 		// In case the value from the fallback (github's tag version )
@@ -139,6 +138,10 @@ func (v *Resolver) GithubFallbackResolveVersion() (PlumbingWithRange, error) {
 	version := "master"
 	if len(v.Value) == 0 {
 		version = v.Value
+	}
+
+	if len(parts) != 3 {
+		return PlumbingWithRange{}, fmt.Errorf("error, invalid resolution reference for github: %v, expected resolution reference to be like so: github.com/<org>/<repo>", v.Pkg)
 	}
 
 	resolvedV, err := gh.resolve(parts[1], parts[2], version)

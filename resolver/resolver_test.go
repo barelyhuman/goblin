@@ -130,6 +130,22 @@ func TestResolveVersionWithVersion(t *testing.T) {
 	}
 }
 
+func TestFallbackResolveVersionForInvalidPkg(t *testing.T) {
+	inputVersion := "0.0.7-dev.5"
+	r := Resolver{
+		Pkg: "github.com/barelyhuman",
+	}
+	err := r.ParseVersion(inputVersion)
+	if err != nil {
+		t.Fatalf("Failed to parse version, err:%v", err)
+	}
+
+	_, err = r.GithubFallbackResolveVersion()
+	if err == nil {
+		t.Fail()
+	}
+}
+
 func TestResolveVersionWithoutVersion(t *testing.T) {
 
 	inputVersion := ""
