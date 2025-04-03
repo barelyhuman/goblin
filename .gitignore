@@ -2,3 +2,5 @@ lab
 .env
 *.patch
 .DS_Store
+
+/static

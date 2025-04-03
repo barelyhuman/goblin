@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
@@ -39,7 +39,7 @@
 						},
 						function () {
 							return fallBackCopy(strToCopy);
-						}
+						},
 					);
 				}
 
@@ -93,7 +93,7 @@
 
 		<nav
 			aria-label="Primary navigation"
-			class="flex justify-between items-center mx-auto animate-kids fade-in-y h-header-height max-w-content px-page-gutter"
+			class="flex items-center justify-between mx-auto animate-kids fade-in-y h-header-height max-w-content px-page-gutter"
 			style="--from: -10px; --delay: 5"
 		>
 			<a href="#" aria-label="Goto top of the page">
@@ -131,25 +131,47 @@
 				</svg>
 			</a>
 
-			<a
-				href="https://github.com/barelyhuman/goblin"
-				class="flex gap-1.5 items-center px-1 py-0.5 text-sm font-medium rounded transition text-subtle hover:bg-surface hover:text-text"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="1em"
-					height="1em"
-					viewBox="0 0 1024 1024"
-					fill="currentColor"
-					stroke="currentColor"
-					stroke-width="0"
+			<div class="flex items-center gap-2">
+				<a
+					href="https://github.com/barelyhuman/goblin/issues"
+					class="flex gap-1.5 items-center px-1 py-0.5 text-sm font-medium rounded transition text-subtle hover:bg-surface hover:text-text"
 				>
-					<path
-						d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9a127.5 127.5 0 0 1 38.1 91v112.5c.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
-					></path>
-				</svg>
-				Star us on GitHub
-			</a>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="1em"
+						height="1em"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						class="icon icon-tabler icons-tabler-filled icon-tabler-bug"
+					>
+						<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+						<path
+							d="M12 4a4 4 0 0 1 3.995 3.8l.005 .2a1 1 0 0 1 .428 .096l3.033 -1.938a1 1 0 1 1 1.078 1.684l-3.015 1.931a7.17 7.17 0 0 1 .476 2.227h3a1 1 0 0 1 0 2h-3v1a6.01 6.01 0 0 1 -.195 1.525l2.708 1.616a1 1 0 1 1 -1.026 1.718l-2.514 -1.501a6.002 6.002 0 0 1 -3.973 2.56v-5.918a1 1 0 0 0 -2 0v5.917a6.002 6.002 0 0 1 -3.973 -2.56l-2.514 1.503a1 1 0 1 1 -1.026 -1.718l2.708 -1.616a6.01 6.01 0 0 1 -.195 -1.526v-1h-3a1 1 0 0 1 0 -2h3.001v-.055a7 7 0 0 1 .474 -2.173l-3.014 -1.93a1 1 0 1 1 1.078 -1.684l3.032 1.939l.024 -.012l.068 -.027l.019 -.005l.016 -.006l.032 -.008l.04 -.013l.034 -.007l.034 -.004l.045 -.008l.015 -.001l.015 -.002l.087 -.004a4 4 0 0 1 4 -4zm0 2a2 2 0 0 0 -2 2h4a2 2 0 0 0 -2 -2z"
+						/>
+					</svg>
+					Report Bugs / Issues
+				</a>
+
+				<a
+					href="https://github.com/barelyhuman/goblin"
+					class="flex gap-1.5 items-center px-1 py-0.5 text-sm font-medium rounded transition text-subtle hover:bg-surface hover:text-text"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="1em"
+						height="1em"
+						viewBox="0 0 1024 1024"
+						fill="currentColor"
+						stroke="currentColor"
+						stroke-width="0"
+					>
+						<path
+							d="M511.6 76.3C264.3 76.2 64 276.4 64 523.5 64 718.9 189.3 885 363.8 946c23.5 5.9 19.9-10.8 19.9-22.2v-77.5c-135.7 15.9-141.2-73.9-150.3-88.9C215 726 171.5 718 184.5 703c30.9-15.9 62.4 4 98.9 57.9 26.4 39.1 77.9 32.5 104 26 5.7-23.5 17.9-44.5 34.7-60.8-140.6-25.2-199.2-111-199.2-213 0-49.5 16.3-95 48.3-131.7-20.4-60.5 1.9-112.3 4.9-120 58.1-5.2 118.5 41.6 123.2 45.3 33-8.9 70.7-13.6 112.9-13.6 42.4 0 80.2 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.3-43.9 2.9 7.7 24.7 58.3 5.5 118 32.4 36.8 48.9 82.7 48.9 132.3 0 102.2-59 188.1-200 212.9a127.5 127.5 0 0 1 38.1 91v112.5c.8 9 0 17.9 15 17.9 177.1-59.7 304.6-227 304.6-424.1 0-247.2-200.4-447.3-447.5-447.3z"
+						></path>
+					</svg>
+					Star us on GitHub
+				</a>
+			</div>
 		</nav>
 
 		<main id="content" class="mx-auto max-w-content px-page-gutter">
@@ -171,14 +193,14 @@
 
 				<div style="--delay: 1" class="relative">
 					<pre><code class="language-command">curl -sf http://goblin.run/github.com/rakyll/hey | sh</code></pre>
-					<div class="flex absolute inset-y-0 right-3 items-center">
+					<div class="absolute inset-y-0 flex items-center right-3">
 						<button
 							@click="() => {
 								$data.copied = true
 								setTimeout(() => { $data.copied = false }, 1500)
 								$clipboard('curl -sf http://goblin.run/github.com/rakyll/hey | sh')
 							}"
-							class="flex justify-center items-center w-7 h-7 rounded shadow transition-all cursor-copy bg-base text-subtle hover:text-text hover:shadow-md"
+							class="flex items-center justify-center transition-all rounded shadow w-7 h-7 cursor-copy bg-base text-subtle hover:text-text hover:shadow-md"
 						>
 							<template x-if="$data.copied">
 								<svg
@@ -226,7 +248,7 @@
 				<div style="--delay: 2">
 					<a
 						href="#introduction"
-						class="inline-flex px-6 py-3 text-sm font-semibold bg-gradient-to-br rounded-md transition-shadow from-primary to-secondary text-surface hover:shadow"
+						class="inline-flex px-6 py-3 text-sm font-semibold transition-shadow rounded-md bg-gradient-to-br from-primary to-secondary text-surface hover:shadow"
 						>Get Started</a
 					>
 				</div>
@@ -234,7 +256,7 @@
 
 			<article id="introduction">
 				<p
-					class="p-3 text-sm font-medium rounded-md border border-primary bg-primary/10 text-primary sm:p-6"
+					class="p-3 text-sm font-medium border rounded-md border-primary bg-primary/10 text-primary sm:p-6"
 				>
 					If you get value from using Goblin, please consider
 					<a href="https://github.com/sponsors/barelyhuman" class="link"
@@ -247,7 +269,7 @@
 		</main>
 
 		<footer class="mx-auto mt-page-top max-w-content px-page-gutter">
-			<div class="flex gap-3 justify-between items-center py-6 border-t">
+			<div class="flex items-center justify-between gap-3 py-6 border-t">
 				<a
 					href="https://github.com/barelyhuman/goblin"
 					class="text-sm transition text-subtle hover:text-text"
