@@ -3,6 +3,9 @@ module.exports = {
 	content: ["./pages/**/*.{html,md}"],
 	theme: {
 		extend: {
+			screens: {
+				xs: "420px",
+			},
 			spacing: {
 				"page-top": "var(--page-top)",
 				"page-gutter": "var(--page-gutter)",
