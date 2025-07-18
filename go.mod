@@ -12,7 +12,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.77
 	github.com/tj/go-semver v1.0.0
 	go.uber.org/ratelimit v0.3.1
-	golang.org/x/oauth2 v0.26.0
+	golang.org/x/oauth2 v0.27.0
 )
 
 // Sec patches
