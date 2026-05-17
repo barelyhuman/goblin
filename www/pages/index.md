@@ -99,8 +99,7 @@ Each request resolves the needed tags and versions from
 replacing the version with a commit hash on supported platforms, e.g. GitHub.
 
 The response of this request is a Golang binary compiled for the requested
-operating system, architecture, package version, and the binary's name—using Go
-1.17.x via the official [Docker image](https://hub.docker.com/_/golang).
+operating system, architecture, package version, and the binary's name—using Go (current supported version can be checked on the [source repo](https://github.com/barelyhuman/goblin/blob/dev/Dockerfile))
 
 **Example response**
 
